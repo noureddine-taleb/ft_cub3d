@@ -21,14 +21,14 @@ void cast_ray(t_state *state, int x, int y, double angle, int color) {
 }
 
 void draw_player(t_state *state) {
+	for (double i = 0; i < state->fov; i += state->ray_offset) {
+		cast_ray(state, state->px + pS/2, state->py + pS/2, state->pa + i - state->fov/2, RED);
+	}
+	
 	for (int j = state->py; j < state->py + pS; j++) {
 		for (int i = state->px; i < state->px + pS; i++) {
 			buffered_pixel_put(state, i, j, YELLOW);
 		}
-	}
-
-	for (double i = 0; i < state->fov; i += state->ray_offset) {
-		cast_ray(state, state->px, state->py, state->pa + i - state->fov/2, RED);
 	}
 }
 
