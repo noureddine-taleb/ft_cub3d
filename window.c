@@ -5,14 +5,11 @@
 */
 #include "cub3d.h"
 
-# define WIDTH (1920)
-# define HEIGHT (1080)
-
 void	init_frame(t_state *vars, t_frame *f)
 {
 	f->img = mlx_new_image(vars->mlx, WIDTH, HEIGHT);
-	f->addr = mlx_get_data_addr(f->img, &f->x_size, &f->y_size, &f->endian);
-	f->x_size /= 8;
+	f->addr = mlx_get_data_addr(f->img, &f->pixel_size, &f->line_size, &f->endian);
+	f->pixel_size /= 8;
 }
 
 int	destroy(t_state *state)
@@ -81,8 +78,8 @@ void	buffered_pixel_put(t_state *state, int x, int y, int color)
 {
 	char	*dst;
 
-	dst = state->frame.addr + (y * state->frame.y_size
-			+ x * (state->frame.x_size));
+	dst = state->frame.addr + (y * state->frame.line_size
+			+ x * (state->frame.pixel_size));
 	*(unsigned int *)dst = color;
 }
 
@@ -91,8 +88,14 @@ void	flush_frame(t_state *state)
 	mlx_put_image_to_window(state->mlx, state->win, state->frame.img, 0, 0);
 }
 
+void reset_frame(t_state *state) {
+	#include <string.h>
+	memset(state->frame.addr, 0, state->frame.line_size * HEIGHT); // TODO: to remove
+}
+
 int	render(t_state *state)
 {
+	reset_frame(state);
 	draw_frame(state);
 	flush_frame(state);
 	return (0);

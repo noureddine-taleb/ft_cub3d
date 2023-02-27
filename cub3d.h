@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 18:08:36 by abihe             #+#    #+#             */
-/*   Updated: 2023/02/24 13:05:17 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/02/27 13:46:12 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,16 @@
 #define mapS 64
 #define mapX(x) (x * 64)
 #define mapY(y) (y * 64)
+
+# define WIDTH (1920)
+# define HEIGHT (1080)
+
+enum wall_orientation {
+	w_in = -1,
+	w_out = 0,
+	w_horizontal = 1,
+	w_vertical = 2,
+};
 
 typedef struct	s_map
 {
@@ -44,8 +54,8 @@ typedef struct	s_map
 typedef struct s_frame {
 	void	*img;
 	char	*addr;
-	int		x_size;
-	int		y_size;
+	int		pixel_size;
+	int		line_size;
 	int		endian;
 }				t_frame;
 
@@ -73,6 +83,8 @@ typedef struct s_state {
 #define BLACK  COLOR(0x00, 0x00, 0x00, 0x00)
 #define WHITE  COLOR(0x00, 0xff, 0xff, 0xff)
 #define YELLOW COLOR(0x00, 0xff, 0xff, 0x00)
+#define GREEN COLOR(0x00, 0x00, 0xff, 0x00)
+#define GREEN_DARK  COLOR(0x00, 0x00, 0x9f, 0x33)
 #define IS_WALL(val) (val == WHITE)
 
 enum {

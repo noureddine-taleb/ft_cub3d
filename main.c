@@ -25,7 +25,7 @@ int main() {
 	state.py = 200;
 	state.pa = -M_PI / 2;
 	state.fov = M_PI / 2;
-	state.ray_offset = 0.01;
+	state.ray_offset = 0.001;
 
 	init_window();
 	render(&state);
