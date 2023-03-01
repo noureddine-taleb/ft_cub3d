@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 18:08:36 by abihe             #+#    #+#             */
-/*   Updated: 2023/02/27 13:46:12 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/01 16:52:19 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,19 +34,25 @@ enum wall_orientation {
 	w_vertical = 2,
 };
 
+enum player_position {
+	north,
+	west,
+	east,
+	south,
+};
+
 typedef struct	s_map
 {
 	int		map_fd;
-	char	*north;
+	char	*north; // texture
 	char	*south;
 	char	*west;
 	char	*east;
 	int		f;
 	int		c;
-	char	*line;
 	int		nb_line;
 	char	**l_map;
-	char	player;
+	enum player_position player_position;
 	int		player_x;
 	int		player_y;
 }	t_map;
