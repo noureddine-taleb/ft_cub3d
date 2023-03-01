@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 18:08:36 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/01 16:52:19 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/01 17:51:16 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <math.h>
+# include <unistd.h>
 # include <mlx.h>
 
 # define MAP ((*(int (*)[state.map_height][state.map_length])state.map))
@@ -65,6 +66,13 @@ typedef struct s_frame {
 	int		endian;
 }				t_frame;
 
+struct texture {
+	char *path;
+	void *img;
+	int width;
+	int height;
+};
+
 typedef struct s_state {
 	void 		*mlx;
 	void		*win;
@@ -81,6 +89,9 @@ typedef struct s_state {
 	double pa; // angle of the player
 	double fov;
 	double ray_offset;
+	
+	// texture
+	struct texture wall_texture;
 } t_state;
 
 // format: 0xTTRRGGBB
@@ -131,5 +142,7 @@ void draw_map(t_state *state);
 void draw_player(t_state *state);
 int is_wall(int x, int y);
 int set_player_pos(int x, int y);
+void read_texture(struct texture *t);
+int	img_pixel_read(struct texture *t, int x, int y);
 
 #endif

@@ -27,7 +27,10 @@ int main() {
 	state.fov = M_PI / 2;
 	state.ray_offset = 0.001;
 
+	state.wall_texture.path = "./assets/0001.xpm";
+
 	init_window();
+	read_texture(&state.wall_texture);
 	render(&state);
 	mlx_loop(state.mlx);
 }

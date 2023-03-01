@@ -17,12 +17,17 @@ void draw_ray(double x, double y, double angle, int color) {
 	}
 }
 
-double cast_ray(t_state *state, const int x0, const int y0, const double angle, int color, enum wall_orientation *orientation) {
+double cast_ray(t_state *state, const int x0, const int y0, const double angle, int color, enum wall_orientation *orientation, int *ix, int *iy) {
 	double vDist = 0;
 	double hDist = 0;
 	double m = tan(angle); // like in y=mx
 	int rx = 0;
 	int ry = 0;
+
+	int vix;
+	int hix;
+	int viy;
+	int hiy;
 	
 	// calc vertical dist
 	if (sin(angle) < 0) { // up
@@ -33,9 +38,7 @@ double cast_ray(t_state *state, const int x0, const int y0, const double angle, 
 		rx = ry / m;
 	}
 	if (sin(angle)) {
-		while (
-			!is_wall(rx + x0, ry + y0)
-			) {
+		while (!is_wall(rx + x0, ry + y0)) {
 			if (sin(angle) < 0) {
 				ry -= mapS;
 				rx = ry / m;
@@ -45,6 +48,7 @@ double cast_ray(t_state *state, const int x0, const int y0, const double angle, 
 			}
 		}
 		vDist = sqrt(rx*rx + ry*ry);
+		vix = rx + x0, viy = ry + y0;
 	} else {
 		vDist = INFINITY;
 	}
@@ -69,33 +73,55 @@ double cast_ray(t_state *state, const int x0, const int y0, const double angle, 
 			}
 		}
 		hDist = sqrt(rx*rx + ry*ry);
+		hix = rx + x0, hiy = ry + y0;
 	} else {
 		hDist = INFINITY;
 	}
 
-	double dist = (vDist > hDist ? ({ *orientation = w_horizontal; hDist; }) : ({ *orientation = w_vertical; vDist; }));
+	double dist = (vDist > hDist ? ({ *orientation = w_horizontal; *ix = hix, *iy = hiy, hDist; }) : ({ *orientation = w_vertical; *ix = vix, *iy = viy, vDist; }));
 	draw_ray(x0, y0, angle, color);
 	return dist;
 }
 
 int line = 0; // TODO: to be removed
 
-void draw_3dline(int i, double dist, double ra, int color) {
+double dist_to_wall_size(double dist, double ra) {
+	dist = dist * cos(state.pa - ra); // fix fisheye effect
+	dist = (HEIGHT*20) / dist;
+	if (dist > HEIGHT)
+		dist = HEIGHT;
+	return dist;
+}
+
+void draw_3dline(int i, double dist, double ra, int color, int ix, int iy) {
 	int line_count = state.fov / state.ray_offset;
 	int line_thickness = WIDTH / line_count; // TOOP cache repeated calcs
 	
 	if (i >= line_count)
 		return;
 
-	dist = dist * cos(state.pa - ra); // fix fisheye effect
-	dist = (HEIGHT*20) / dist;
-	if (dist > HEIGHT)
-		dist = HEIGHT;
+	dist = dist_to_wall_size(dist, ra);
 
 	int startx = i * line_thickness;
-	for (int col = 0; col < line_thickness; col++) {
-		for (int row = 0; row < dist; row++) {
-			buffered_pixel_put(&state, startx + col, (HEIGHT/2) - dist/2 + row, color);
+	int starty = (HEIGHT/2) - dist/2;
+	// sky or ceiling
+	for (int col = startx; col < startx + line_thickness; col++) {
+		for (int row = 0; row < starty; row++) {
+			buffered_pixel_put(&state, col, row, COLOR(0x00, 0x66, 0xb2, 0xff));
+		}
+	}
+	// walls
+	int x = ix % mapS / (double)mapS * state.wall_texture.width;
+	for (int col = startx; col < startx + line_thickness; col++, x++) {
+		for (int row = starty, y = 0; row < starty + dist; row++, y++) {
+			buffered_pixel_put(&state, col, row, img_pixel_read(&state.wall_texture, x, y));
+			// buffered_pixel_put(&state, col, row, color);
+		}
+	}
+	// ground
+	for (int col = startx; col < startx + line_thickness; col++) {
+		for (int row = starty + dist; row < HEIGHT; row++) {
+			buffered_pixel_put(&state, col, row, COLOR(0x00, 0xc0, 0xc0, 0xc0));
 		}
 	}
 }
@@ -109,13 +135,14 @@ void draw_player(t_state *state) {
 
 	line = 0;
 	enum wall_orientation orientation;
+	int ix, iy;
 	for (double i = 0; i < state->fov; i += state->ray_offset) {
 		double ra = state->pa + i - state->fov/2;
-		int dist = cast_ray(state, state->px + pS/2, state->py + pS/2, ra, RED, &orientation);
+		int dist = cast_ray(state, state->px + pS/2, state->py + pS/2, ra, RED, &orientation, &ix, &iy);
 		if (orientation == w_horizontal)
-			draw_3dline(line, dist, ra, GREEN);
+			draw_3dline(line, dist, ra, GREEN, ix, iy);
 		else if (orientation == w_vertical)
-			draw_3dline(line, dist, ra, GREEN_DARK);
+			draw_3dline(line, dist, ra, GREEN_DARK, ix, iy);
 		line++;
 	}
 }
