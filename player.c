@@ -88,8 +88,6 @@ int line = 0; // TODO: to be removed
 double dist_to_wall_size(double dist, double ra) {
 	dist = dist * cos(state.pa - ra); // fix fisheye effect
 	dist = (HEIGHT*20) / dist;
-	if (dist > HEIGHT)
-		dist = HEIGHT;
 	return dist;
 }
 
@@ -104,6 +102,12 @@ void draw_3dline(int i, double dist, double ra, enum wall_orientation orientatio
 
 	int startx = i * line_thickness;
 	int starty = (HEIGHT/2) - dist/2;
+	double initTextureY = 0;
+	double stepy = (double)state.wall_texture.height / dist;
+	if (starty < 0) {
+		initTextureY = -starty * stepy;
+		starty = 0;
+	}
 	// sky or ceiling
 	for (int col = startx; col < startx + line_thickness; col++) {
 		for (int row = 0; row < starty; row++) {
@@ -116,11 +120,10 @@ void draw_3dline(int i, double dist, double ra, enum wall_orientation orientatio
 		x = iy % (mapS) / (double)mapS * state.wall_texture.width;
 	else
 		x = ix % (mapS) / (double)mapS * state.wall_texture.width;
-	double stepy = (double)state.wall_texture.height / dist;
-	double y = 0;
+	double y;
 	for (int col = startx; col < startx + line_thickness; col++) {
-		y = 0;
-		for (int row = starty; row < starty + dist; row++, y+=stepy) {
+		y = initTextureY;
+		for (int row = starty; (row < starty + dist) && row < HEIGHT; row++, y+=stepy) {
 			buffered_pixel_put(&state, col, row, img_pixel_read(&state.wall_texture, x, y));
 			// buffered_pixel_put(&state, col, row, color);
 		}
