@@ -1,21 +1,8 @@
 #include "cub3d.h"
 
-#define pS 8
-
 // double dist(int ax, int ay, int bx, int by) {
 
 // }
-
-void draw_ray(double x, double y, double angle, int color) {
-	double dx = cos(angle);
-	double dy = sin(angle);
-
-	while (!is_wall(x, y)) {
-		buffered_pixel_put(&state, x, y, color);
-		x += dx;
-		y += dy;
-	}
-}
 
 double cast_ray(t_state *state, const int x0, const int y0, const double angle, int color, enum wall_orientation *orientation, int *ix, int *iy) {
 	double vDist = 0;
@@ -79,7 +66,7 @@ double cast_ray(t_state *state, const int x0, const int y0, const double angle, 
 	}
 
 	double dist = (vDist > hDist ? ({ *orientation = w_vertical; *ix = hix, *iy = hiy, hDist; }) : ({ *orientation = w_horizontal; *ix = vix, *iy = viy, vDist; }));
-	draw_ray(x0, y0, angle, color);
+	// draw_ray(x0, y0, angle, color);
 	return dist;
 }
 
@@ -136,19 +123,13 @@ void draw_3dline(int i, double dist, double ra, enum wall_orientation orientatio
 	}
 }
 
-void draw_player(t_state *state) {
-	for (int j = state->py; j < state->py + pS; j++) {
-		for (int i = state->px; i < state->px + pS; i++) {
-			buffered_pixel_put(state, i, j, YELLOW);
-		}
-	}
-
+void draw_3dscene(t_state *state) {
 	line = 0;
 	enum wall_orientation orientation;
 	int ix, iy;
 	for (double i = 0; i < state->fov; i += state->ray_offset) {
 		double ra = state->pa + i - state->fov/2;
-		int dist = cast_ray(state, state->px + pS/2, state->py + pS/2, ra, RED, &orientation, &ix, &iy);
+		int dist = cast_ray(state, state->px, state->py, ra, RED, &orientation, &ix, &iy);
 		draw_3dline(line, dist, ra, orientation, ix, iy);
 		line++;
 	}

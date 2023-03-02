@@ -8,11 +8,35 @@ void draw_map_pixel(t_state *_state, int x, int y) {
 	}
 }
 
+void draw_ray(double x, double y, double angle, int color) {
+	double dx = cos(angle);
+	double dy = sin(angle);
+
+	while (!is_wall(x, y)) {
+		buffered_pixel_put(&state, x, y, color);
+		x += dx;
+		y += dy;
+	}
+}
+
 void draw_map(t_state *state) {
+	// draw map
 	for (int j = 0; j < state->map_height; j++) {
 		for (int i = 0; i < state->map_length; i++) {
 			draw_map_pixel(state, i, j);
 		}
+	}
+
+	// draw player
+	for (int j = state->py; j < state->py + pS; j++) {
+		for (int i = state->px; i < state->px + pS; i++) {
+			buffered_pixel_put(state, i, j, YELLOW);
+		}
+	}
+
+	// draw rays
+	for (double ra = state->pa - state->fov/2; ra < state->pa + state->fov/2; ra += state->ray_offset) {
+		draw_ray(state->px + pS/2, state->py + pS/2, ra, RED);
 	}
 }
 

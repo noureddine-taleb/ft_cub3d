@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 18:08:36 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/01 17:51:16 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/02 13:26:49 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,10 @@
 
 # define MAP ((*(int (*)[state.map_height][state.map_length])state.map))
 
-#define mapS 64
-#define mapX(x) (x * 64)
-#define mapY(y) (y * 64)
+#define mapS 32
+#define mapX(x) (x * mapS)
+#define mapY(y) (y * mapS)
+#define pS 8
 
 # define WIDTH (1920)
 # define HEIGHT (1080)
@@ -139,7 +140,7 @@ int	render(t_state *state);
 void draw_frame(t_state *state);
 void buffered_pixel_put(t_state *state, int x, int y, int color);
 void draw_map(t_state *state);
-void draw_player(t_state *state);
+void draw_3dscene(t_state *state);
 int is_wall(int x, int y);
 int set_player_pos(int x, int y);
 void read_texture(struct texture *t);
