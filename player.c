@@ -152,13 +152,17 @@ void draw_player(t_state *state) {
 }
 
 int set_player_pos(int x, int y) {
-	if (x >= 0 && x < state.map_length * mapS
-		&& y >= 0 && y < state.map_height * mapS
-		&& is_wall(x, y) == w_out
-	) {
+	if (
+		x >= 0 && x < state.map_length * mapS
+		&& is_wall(x, state.py) == w_out
+	)
 		state.px = x;
+
+	if (
+		y >= 0 && y < state.map_height * mapS
+		&& is_wall(state.px, y) == w_out
+	)
 		state.py = y;
-		return 1;
-	}
+
 	return 0;
 }
