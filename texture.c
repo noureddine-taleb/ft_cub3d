@@ -10,11 +10,8 @@ int	img_pixel_read(struct texture *t, int x, int y) {
 }
 
 void read_texture(struct texture *t) {
-	// TODO: verify texture dimensions
 	int dummy;
-	// void *mlx = mlx_init(); // TODO: this probably needs to be freed
 	t->img = mlx_xpm_file_to_image(state.mlx, t->path, &t->width, &t->height);
-	printf("done opening xpm file\n");
 	if (!t->img) {
 		printf("can't open texture img\n");
 		exit(1);

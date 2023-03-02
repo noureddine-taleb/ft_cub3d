@@ -78,7 +78,7 @@ double cast_ray(t_state *state, const int x0, const int y0, const double angle, 
 		hDist = INFINITY;
 	}
 
-	double dist = (vDist > hDist ? ({ *orientation = w_horizontal; *ix = hix, *iy = hiy, hDist; }) : ({ *orientation = w_vertical; *ix = vix, *iy = viy, vDist; }));
+	double dist = (vDist > hDist ? ({ *orientation = w_vertical; *ix = hix, *iy = hiy, hDist; }) : ({ *orientation = w_horizontal; *ix = vix, *iy = viy, vDist; }));
 	draw_ray(x0, y0, angle, color);
 	return dist;
 }
@@ -93,7 +93,7 @@ double dist_to_wall_size(double dist, double ra) {
 	return dist;
 }
 
-void draw_3dline(int i, double dist, double ra, int color, int ix, int iy) {
+void draw_3dline(int i, double dist, double ra, enum wall_orientation orientation, int ix, int iy) {
 	int line_count = state.fov / state.ray_offset;
 	int line_thickness = WIDTH / line_count; // TOOP cache repeated calcs
 	
@@ -111,9 +111,16 @@ void draw_3dline(int i, double dist, double ra, int color, int ix, int iy) {
 		}
 	}
 	// walls
-	int x = ix % mapS / (double)mapS * state.wall_texture.width;
-	for (int col = startx; col < startx + line_thickness; col++, x++) {
-		for (int row = starty, y = 0; row < starty + dist; row++, y++) {
+	int x;
+	if (orientation == w_vertical)
+		x = iy % (mapS) / (double)mapS * state.wall_texture.width;
+	else
+		x = ix % (mapS) / (double)mapS * state.wall_texture.width;
+	double stepy = (double)state.wall_texture.height / dist;
+	double y = 0;
+	for (int col = startx; col < startx + line_thickness; col++) {
+		y = 0;
+		for (int row = starty; row < starty + dist; row++, y+=stepy) {
 			buffered_pixel_put(&state, col, row, img_pixel_read(&state.wall_texture, x, y));
 			// buffered_pixel_put(&state, col, row, color);
 		}
@@ -139,10 +146,7 @@ void draw_player(t_state *state) {
 	for (double i = 0; i < state->fov; i += state->ray_offset) {
 		double ra = state->pa + i - state->fov/2;
 		int dist = cast_ray(state, state->px + pS/2, state->py + pS/2, ra, RED, &orientation, &ix, &iy);
-		if (orientation == w_horizontal)
-			draw_3dline(line, dist, ra, GREEN, ix, iy);
-		else if (orientation == w_vertical)
-			draw_3dline(line, dist, ra, GREEN_DARK, ix, iy);
+		draw_3dline(line, dist, ra, orientation, ix, iy);
 		line++;
 	}
 }
