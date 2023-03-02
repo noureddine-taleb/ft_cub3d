@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 18:08:36 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/02 13:26:49 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/02 13:38:52 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@
 #define mapY(y) (y * mapS)
 #define pS 8
 
-# define WIDTH (1920)
+// # define WIDTH (1920)
+# define WIDTH (1570)
 # define HEIGHT (1080)
 
 enum wall_orientation {
