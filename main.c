@@ -28,9 +28,14 @@ int main() {
 	state.ray_offset = 0.001;
 
 	state.wall_texture.path = "./assets/0001.xpm";
+	state.monster_sprite.path = "./assets/monster.xpm";
+	state.monster_sprite.mx = 200;
+	state.monster_sprite.my = 100;
+	state.monster_sprite.dist = INFINITY;
 
 	init_window();
 	read_texture(&state.wall_texture);
+	read_sprite(&state.monster_sprite);
 	render(&state);
 	mlx_loop(state.mlx);
 }

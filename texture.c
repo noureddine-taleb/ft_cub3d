@@ -18,3 +18,13 @@ void read_texture(struct texture *t) {
 	}
 	t->img = mlx_get_data_addr(t->img, &dummy, &dummy, &dummy);
 }
+
+void read_sprite(struct sprite *t) {
+	int dummy;
+	t->img = mlx_xpm_file_to_image(state.mlx, t->path, &t->width, &t->height);
+	if (!t->img) {
+		printf("can't open texture img\n");
+		exit(1);
+	}
+	t->img = mlx_get_data_addr(t->img, &dummy, &dummy, &dummy);
+}

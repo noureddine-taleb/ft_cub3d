@@ -1,8 +1,8 @@
 #include "cub3d.h"
 
-// double dist(int ax, int ay, int bx, int by) {
-
-// }
+double dist_from_origin(int x, int y) {
+	return sqrt(x*x + y*y);
+}
 
 double cast_ray(t_state *state, const int x0, const int y0, const double angle, int color, enum wall_orientation *orientation, int *ix, int *iy) {
 	double vDist = 0;
@@ -26,6 +26,8 @@ double cast_ray(t_state *state, const int x0, const int y0, const double angle, 
 	}
 	if (sin(angle)) {
 		while (!is_wall(rx + x0, ry + y0)) {
+			if (is_monster(rx + x0, ry + y0))
+				state->monster_sprite.dist = sqrt(rx*rx + ry*ry);
 			if (sin(angle) < 0) {
 				ry -= mapS;
 				rx = ry / m;
@@ -51,6 +53,9 @@ double cast_ray(t_state *state, const int x0, const int y0, const double angle, 
 	}
 	if (cos(angle)) {
 		while (!is_wall(rx + x0, ry + y0)) {
+			if (is_monster(rx + x0, ry + y0) && state->monster_sprite.dist > sqrt(rx*rx + ry*ry))
+				state->monster_sprite.dist = sqrt(rx*rx + ry*ry);
+
 			if (cos(angle) < 0) { // left
 				rx -= mapS;
 				ry = m * rx;
@@ -123,6 +128,47 @@ void draw_3dline(int i, double dist, double ra, enum wall_orientation orientatio
 	}
 }
 
+
+int	sprite_pixel_read(struct sprite *t, int x, int y) {
+	char	*dst;
+
+	if (x >= t->width || y >= t->height)
+		return 0;
+	dst = t->img + (y * t->width * 4 + x * (4));
+	return *(unsigned int *)dst;
+}
+
+void rotate(double *x, double *y, double angle) {
+	double _sin = sin(-state.pa);
+	double _cos = cos(-state.pa);
+
+	double a = *x * _cos - *y * _sin;
+	double b = *x * _sin + *y * _cos;
+	*x = a;
+	*y = b;
+}
+
+void draw_sprite() {
+	struct sprite *monster = &state.monster_sprite;
+	double sx = monster->mx - state.px;
+	double sy = monster->my - state.py;
+	double sz = 2;
+
+	rotate(&sx, &sy, -state.pa);
+	double dist = dist_from_origin(sx, sy);
+	double pixel_per_step = (WIDTH) / (state.fov * dist);
+	sx = sy * pixel_per_step + (WIDTH/2);
+	sy = sz * pixel_per_step + (HEIGHT/2);
+
+	if (sx < 0 || sy < 0 || sx > WIDTH || sy > HEIGHT)
+		return;
+	for (int x = sx; x < sx + pS; x++) {
+		for (int y=sy; y < sy + pS; y++) {
+			buffered_pixel_put(&state, x, y, GREEN);
+		}
+	}
+}
+
 void draw_3dscene(t_state *state) {
 	line = 0;
 	enum wall_orientation orientation;
@@ -133,6 +179,8 @@ void draw_3dscene(t_state *state) {
 		draw_3dline(line, dist, ra, orientation, ix, iy);
 		line++;
 	}
+	// if (state->monster_sprite.dist != INFINITY)
+		draw_sprite();
 }
 
 int set_player_pos(int x, int y) {

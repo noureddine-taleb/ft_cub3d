@@ -38,6 +38,13 @@ void draw_map(t_state *state) {
 	for (double ra = state->pa - state->fov/2; ra < state->pa + state->fov/2; ra += state->ray_offset) {
 		draw_ray(state->px + pS/2, state->py + pS/2, ra, RED);
 	}
+
+	// draw sprite
+	for (int j = state->monster_sprite.my; j < state->monster_sprite.my + pS; j++) {
+		for (int i = state->monster_sprite.mx; i < state->monster_sprite.mx + pS; i++) {
+			buffered_pixel_put(state, i, j, GREEN);
+		}
+	}
 }
 
 enum wall_orientation is_wall(int x, int y) {
@@ -50,5 +57,14 @@ enum wall_orientation is_wall(int x, int y) {
 	if (IS_WALL(MAP[y][x])) {
 		return 1;
 	}
+	return 0;
+}
+
+int is_monster(int x, int y) {
+	x /= mapS;
+	y /= mapS;
+
+	if (x == state.monster_sprite.mx && y == state.monster_sprite.my)
+		return 1;
 	return 0;
 }

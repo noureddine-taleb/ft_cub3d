@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 18:08:36 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/02 13:38:52 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/03 11:06:58 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,20 @@ struct texture {
 	int height;
 };
 
+#define MAXSPRITES 20
+
+struct sprite {
+	char *path;
+	void *img;
+	int xs[MAXSPRITES];
+	int ys[MAXSPRITES];
+	int width;
+	int height;
+	int mx;
+	int my;
+	double dist;
+};
+
 typedef struct s_state {
 	void 		*mlx;
 	void		*win;
@@ -94,6 +108,7 @@ typedef struct s_state {
 	
 	// texture
 	struct texture wall_texture;
+	struct sprite  monster_sprite;
 } t_state;
 
 // format: 0xTTRRGGBB
@@ -145,6 +160,8 @@ void draw_3dscene(t_state *state);
 int is_wall(int x, int y);
 int set_player_pos(int x, int y);
 void read_texture(struct texture *t);
+void read_sprite(struct sprite *t);
 int	img_pixel_read(struct texture *t, int x, int y);
+int is_monster(int x, int y);
 
 #endif
