@@ -1,7 +1,7 @@
-support different textures for each side of the wall
-sprites
-doors
-memory leaks
-norm
 integrate parser attributes
+fix glitches
+support different textures for each side of the wall
+doors
 refactoring
+norm
+memory leaks

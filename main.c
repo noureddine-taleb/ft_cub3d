@@ -29,7 +29,7 @@ int main() {
 
 	state.__line_count = state.fov / state.ray_offset;
 	state.__line_thickness = WIDTH / state.__line_count;
-	state.zbuffer = malloc(state.__line_count * sizeof(double));
+	state.zbuffer = malloc((state.__line_count + 1) * sizeof(double));
 
 	state.wall_texture.path = "./assets/0001.xpm";
 	state.monster_sprite.path = "./assets/monster.xpm";
@@ -40,6 +40,7 @@ int main() {
 	init_window();
 	read_texture(&state.wall_texture);
 	read_sprite(&state.monster_sprite);
+
 	render(&state);
 	mlx_loop(state.mlx);
 }

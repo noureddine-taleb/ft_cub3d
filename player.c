@@ -117,8 +117,8 @@ void draw_3dline(int i, double dist, double ra, enum wall_orientation orientatio
 		}
 	}
 	// ground
-	for (int col = startx; col < startx + state.__line_thickness; col++) {
-		for (int row = starty + dist; row < HEIGHT; row++) {
+	for (int col = startx; col < (startx + state.__line_thickness) && col >= 0 && col < WIDTH; col++) {
+		for (int row = starty + dist; row >= 0 && row < HEIGHT; row++) {
 			buffered_pixel_put(&state, col, row, COLOR(0x00, 0xc0, 0xc0, 0xc0));
 		}
 	}
@@ -127,8 +127,6 @@ void draw_3dline(int i, double dist, double ra, enum wall_orientation orientatio
 int	sprite_pixel_read(struct sprite *t, int x, int y) {
 	char	*dst;
 
-	if (x >= t->width || y >= t->height)
-		return 0;
 	dst = t->img + (y * t->width * 4 + x * (4));
 	return *(unsigned int *)dst;
 }
@@ -147,11 +145,13 @@ void draw_sprite() {
 	struct sprite *monster = &state.monster_sprite;
 	double sx = monster->mx - state.px;
 	double sy = monster->my - state.py;
-	double sz = 2;
+	double sz = 5;
 
 	rotate(&sx, &sy, -state.pa);
 	double dist = dist_from_origin(sx, sy);
 	double pixel_per_step = (WIDTH) / (state.fov * dist);
+	if (sx < 0)
+		return;
 	sx = sy * pixel_per_step + (WIDTH/2);
 	sy = sz * pixel_per_step + (HEIGHT/2);
 
@@ -161,9 +161,23 @@ void draw_sprite() {
 	if (state.zbuffer[(int)(sx / state.__line_thickness)] < dist)
 		return;
 
-	for (int x = sx; x < sx + pS; x++) {
-		for (int y=sy; y < sy + pS; y++) {
-			buffered_pixel_put(&state, x, y, GREEN);
+	if (dist <= 0)
+		return;
+
+	double height = monster->height * 30 / dist;
+	double width = monster->width * 30 / dist;
+	double startx = sx - width/2;
+	double starty = sy - height/2;
+	double dy = monster->height / height;
+	double dx = monster->width / width;
+	double tx = 0;
+	double ty = 0;
+	for (int x = startx; x < startx + width && tx < monster->width; x++, tx += dx) {
+		if (x < 0 || x >= WIDTH)
+			continue;
+		ty = 0;
+		for (int y = starty; y < starty + height && y < HEIGHT && ty < monster->height; y++, ty += dy) {
+			buffered_pixel_put(&state, x, y, sprite_pixel_read(monster, tx, ty));
 		}
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 18:08:36 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/04 20:08:31 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/05 11:17:36 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,7 @@ extern t_state state;
 void init_window();
 int	render(t_state *state);
 void draw_frame(t_state *state);
-void buffered_pixel_put(t_state *state, int x, int y, int color);
+void buffered_pixel_put(t_state *state, int x, int y, unsigned int color);
 void draw_map(t_state *state);
 void draw_3dscene(t_state *state);
 int is_wall(int x, int y);

@@ -74,10 +74,20 @@ void init_window() {
 	mlx_hook(state.win, ON_DESTROY, 0, destroy, &state);
 }
 
-void	buffered_pixel_put(t_state *state, int x, int y, int color)
+void	buffered_pixel_put(t_state *state, int x, int y, unsigned int color)
 {
 	char	*dst;
 
+	// if (x >= WIDTH || y >= HEIGHT)
+	// 	exit(3);
+	// if (x < 0 && y < 0)
+	// 	exit(0);
+	// if (x < 0)
+	// 	exit(1);
+	// if (y < 0)
+	// 	exit(2);
+	if (color & 0xff000000)
+		return;
 	dst = state->frame.addr + (y * state->frame.line_size
 			+ x * (state->frame.pixel_size));
 	*(unsigned int *)dst = color;
