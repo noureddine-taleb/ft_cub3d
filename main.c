@@ -27,6 +27,10 @@ int main() {
 	state.fov = M_PI / 2;
 	state.ray_offset = 0.001;
 
+	state.__line_count = state.fov / state.ray_offset;
+	state.__line_thickness = WIDTH / state.__line_count;
+	state.zbuffer = malloc(state.__line_count * sizeof(double));
+
 	state.wall_texture.path = "./assets/0001.xpm";
 	state.monster_sprite.path = "./assets/monster.xpm";
 	state.monster_sprite.mx = 200;

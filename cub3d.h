@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 18:08:36 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/03 11:06:58 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/04 20:08:31 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,9 @@ typedef struct s_state {
 	double pa; // angle of the player
 	double fov;
 	double ray_offset;
+	int __line_count;
+	int __line_thickness;
+	double *zbuffer;
 	
 	// texture
 	struct texture wall_texture;

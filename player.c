@@ -75,8 +75,6 @@ double cast_ray(t_state *state, const int x0, const int y0, const double angle, 
 	return dist;
 }
 
-int line = 0; // TODO: to be removed
-
 double dist_to_wall_size(double dist, double ra) {
 	dist = dist * cos(state.pa - ra); // fix fisheye effect
 	dist = (HEIGHT*20) / dist;
@@ -84,15 +82,13 @@ double dist_to_wall_size(double dist, double ra) {
 }
 
 void draw_3dline(int i, double dist, double ra, enum wall_orientation orientation, int ix, int iy) {
-	int line_count = state.fov / state.ray_offset;
-	int line_thickness = WIDTH / line_count; // TOOP cache repeated calcs
 	
-	if (i >= line_count)
+	if (i >= state.__line_count)
 		return;
 
 	dist = dist_to_wall_size(dist, ra);
 
-	int startx = i * line_thickness;
+	int startx = i * state.__line_thickness;
 	int starty = (HEIGHT/2) - dist/2;
 	double initTextureY = 0;
 	double stepy = (double)state.wall_texture.height / dist;
@@ -101,7 +97,7 @@ void draw_3dline(int i, double dist, double ra, enum wall_orientation orientatio
 		starty = 0;
 	}
 	// sky or ceiling
-	for (int col = startx; col < startx + line_thickness; col++) {
+	for (int col = startx; col < startx + state.__line_thickness; col++) {
 		for (int row = 0; row < starty; row++) {
 			buffered_pixel_put(&state, col, row, COLOR(0x00, 0x66, 0xb2, 0xff));
 		}
@@ -113,7 +109,7 @@ void draw_3dline(int i, double dist, double ra, enum wall_orientation orientatio
 	else
 		x = ix % (mapS) / (double)mapS * state.wall_texture.width;
 	double y;
-	for (int col = startx; col < startx + line_thickness; col++) {
+	for (int col = startx; col < startx + state.__line_thickness; col++) {
 		y = initTextureY;
 		for (int row = starty; (row < starty + dist) && row < HEIGHT; row++, y+=stepy) {
 			buffered_pixel_put(&state, col, row, img_pixel_read(&state.wall_texture, x, y));
@@ -121,13 +117,12 @@ void draw_3dline(int i, double dist, double ra, enum wall_orientation orientatio
 		}
 	}
 	// ground
-	for (int col = startx; col < startx + line_thickness; col++) {
+	for (int col = startx; col < startx + state.__line_thickness; col++) {
 		for (int row = starty + dist; row < HEIGHT; row++) {
 			buffered_pixel_put(&state, col, row, COLOR(0x00, 0xc0, 0xc0, 0xc0));
 		}
 	}
 }
-
 
 int	sprite_pixel_read(struct sprite *t, int x, int y) {
 	char	*dst;
@@ -162,6 +157,10 @@ void draw_sprite() {
 
 	if (sx < 0 || sy < 0 || sx > WIDTH || sy > HEIGHT)
 		return;
+
+	if (state.zbuffer[(int)(sx / state.__line_thickness)] < dist)
+		return;
+
 	for (int x = sx; x < sx + pS; x++) {
 		for (int y=sy; y < sy + pS; y++) {
 			buffered_pixel_put(&state, x, y, GREEN);
@@ -170,17 +169,15 @@ void draw_sprite() {
 }
 
 void draw_3dscene(t_state *state) {
-	line = 0;
 	enum wall_orientation orientation;
 	int ix, iy;
-	for (double i = 0; i < state->fov; i += state->ray_offset) {
-		double ra = state->pa + i - state->fov/2;
-		int dist = cast_ray(state, state->px, state->py, ra, RED, &orientation, &ix, &iy);
-		draw_3dline(line, dist, ra, orientation, ix, iy);
+	int line = 0;
+	for (double ra = state->pa - state->fov/2; ra < state->pa + state->fov/2; ra += state->ray_offset) {
+		state->zbuffer[line] = cast_ray(state, state->px, state->py, ra, RED, &orientation, &ix, &iy);
+		draw_3dline(line, state->zbuffer[line], ra, orientation, ix, iy);
 		line++;
 	}
-	// if (state->monster_sprite.dist != INFINITY)
-		draw_sprite();
+	draw_sprite();
 }
 
 int set_player_pos(int x, int y) {
