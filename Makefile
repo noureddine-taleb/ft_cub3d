@@ -14,9 +14,9 @@ $(MINILIBX): $(MINILIBX_DIR)
 	$(MAKE) -C $^
 
 clean:
-	rm -f *.o
+	-rm -f *.o
 
 fclean: clean
-	rm $(TARGET)
+	-rm $(TARGET)
 
 re: fclean all
