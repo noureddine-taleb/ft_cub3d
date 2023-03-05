@@ -31,11 +31,21 @@ int key_press(int keycode, t_state *state) {
 		break;
 
 	case KEY_UP:
+	case KEY_W:
 		set_player_pos(state->px + cos(state->pa) * 5, state->py + sin(state->pa) * 5);
 		break;
 
 	case KEY_DOWN:
+	case KEY_S:
 		set_player_pos(state->px - cos(state->pa) * 5, state->py - sin(state->pa) * 5);
+		break;
+
+	case KEY_A:
+		set_player_pos(state->px + cos(state->pa - M_PI/2) * 5, state->py + sin(state->pa - M_PI/2) * 5);
+		break;
+
+	case KEY_D:
+		set_player_pos(state->px + cos(state->pa + M_PI/2) * 5, state->py + sin(state->pa + M_PI/2) * 5);
 		break;
 	
 	case KEY_ESC:
