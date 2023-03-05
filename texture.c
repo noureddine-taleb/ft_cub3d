@@ -11,20 +11,16 @@ int	img_pixel_read(struct texture *t, int x, int y) {
 
 void read_texture(struct texture *t) {
 	int dummy;
-	t->img = mlx_xpm_file_to_image(state.mlx, t->path, &t->width, &t->height);
-	if (!t->img) {
-		printf("can't open texture img\n");
-		exit(1);
-	}
+	t->img = mlx_xpm_file_to_image(state.__mlx, t->path, &t->width, &t->height);
+	if (!t->img)
+		die("can't open texture img");
 	t->img = mlx_get_data_addr(t->img, &dummy, &dummy, &dummy);
 }
 
 void read_sprite(struct sprite *t) {
 	int dummy;
-	t->img = mlx_xpm_file_to_image(state.mlx, t->path, &t->width, &t->height);
-	if (!t->img) {
-		printf("can't open texture img\n");
-		exit(1);
-	}
+	t->img = mlx_xpm_file_to_image(state.__mlx, t->path, &t->width, &t->height);
+	if (!t->img)
+		die("can't open texture img");
 	t->img = mlx_get_data_addr(t->img, &dummy, &dummy, &dummy);
 }

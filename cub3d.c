@@ -1,6 +1,12 @@
 #include "cub3d.h"
 
-void draw_frame(t_state *state) {
-	draw_3dscene(state);
-	draw_map(state);
+void die(char *msg) {
+	perror(msg);
+	exit(1);
+}
+
+void draw_frame() {
+	raycasting();
+	draw_sprite();
+	draw_map();
 }

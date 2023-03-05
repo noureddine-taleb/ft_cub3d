@@ -1,46 +1,94 @@
 #include "cub3d.h"
 
-#define MAP_LENGTH 8
-#define MAP_HEIGHT 8
-
-int map[MAP_HEIGHT][MAP_LENGTH] = {
-	{ WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE },
-	{ WHITE, BLACK, WHITE, BLACK, BLACK, BLACK, BLACK, WHITE },
-	{ WHITE, BLACK, WHITE, BLACK, BLACK, BLACK, BLACK, WHITE },
-	{ WHITE, BLACK, WHITE, BLACK, BLACK, BLACK, BLACK, WHITE },
-	{ WHITE, BLACK, BLACK, BLACK, BLACK, BLACK, BLACK, WHITE },
-	{ WHITE, BLACK, BLACK, BLACK, BLACK, WHITE, BLACK, WHITE },
-	{ WHITE, BLACK, BLACK, BLACK, BLACK, BLACK, BLACK, WHITE },
-	{ WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE },
-};
-
 t_state state;
 
+void parser() {
+	// state.map_height = 14;
+	// state.map_width = 33;
+	// state.map = malloc(state.map_height * sizeof(char *));
+	// state.map[0] = "        1111111111111111111111111";
+	// state.map[1] = "        1000000000110000000000001";
+	// state.map[2] = "        1011000001110000000000001";
+	// state.map[3] = "        1001000000000000000000001";
+	// state.map[4] = "111111111011000001110000000000001";
+	// state.map[5] = "100000000011000001110111111111111";
+	// state.map[6] = "11110111111111011100000010001    ";
+	// state.map[7] = "11110111111111011101010010001    ";
+	// state.map[8] = "11000000110101011100000010001    ";
+	// state.map[9] = "10000000000000001100000010001    ";
+	// state.map[10] = "10000000000000001101010010001    ";
+	// state.map[11] = "1100000111010101111101111000111  ";
+	// state.map[12] = "11110111 1110101 101111010001    ";
+	// state.map[13] = "11111111 1111111 111111111111    ";
+	// state.px = 26;
+	// state.py = 11;
+	// state.sprite.sy = 1;
+	// state.sprite.sx = 11;
+
+	state.map_height = 8;
+	state.map_width = 8;
+	state.map = malloc(state.map_height * sizeof(char *));
+
+	state.map[0] = "11111111";
+	state.map[1] = "10100001";
+	state.map[2] = "10100001";
+	state.map[3] = "10100001";
+	state.map[4] = "10000001";
+	state.map[5] = "10000101";
+	state.map[6] = "10000001";
+	state.map[7] = "11111111";
+
+	state.px = 6;
+	state.py = 6;
+	state.initial_orientation = north;
+
+	state.north_texture.path = "./assets/0001.xpm";
+	state.south_texture.path = "./assets/0001.xpm";
+	state.west_texture.path = "./assets/0001.xpm";
+	state.east_texture.path = "./assets/0001.xpm";
+
+	state.c = COLOR(0x00, 0x66, 0xb2, 0xff);
+	state.f = COLOR(0x00, 0xc0, 0xc0, 0xc0);
+
+	state.sprite.path = "./assets/monster.xpm";
+	state.sprite.sy = 2;
+	state.sprite.sx = 3;
+}
+
 int main() {
-	state.map = (int *)&map;
-	state.map_height = MAP_HEIGHT;
-	state.map_length = MAP_LENGTH;
-
-	state.px = 200;
-	state.py = 200;
-	state.pa = -M_PI / 2;
-	state.fov = M_PI / 2;
-	state.ray_offset = 0.001;
-
-	state.__line_count = state.fov / state.ray_offset;
+	parser();
+	// char *str;
+	// for (int i = 0; i < state.map_width; i++) {
+	// 	printf("%c", str[i]);
+	// }
+	// printf("%s\n", state.map[1]);
+	// exit(1);
+	// for (int j = 0; j < state.map_height; j++) {
+	// 	for (int i = 0; i < state.map_width; i++) {
+	// 		printf("%c", MAP(i, j));
+	// 	}
+	// 	printf("\n");
+	// }
+	// exit(1);
+	state.__fov = M_PI / 2;
+	state.__ray_offset = 0.001;
+	state.__pa = -(M_PI / 2) * state.initial_orientation;
+	state.__line_count = state.__fov / state.__ray_offset;
 	state.__line_thickness = WIDTH / state.__line_count;
-	state.zbuffer = malloc((state.__line_count + 1) * sizeof(double));
 
-	state.wall_texture.path = "./assets/0001.xpm";
-	state.monster_sprite.path = "./assets/monster.xpm";
-	state.monster_sprite.mx = 200;
-	state.monster_sprite.my = 100;
-	state.monster_sprite.dist = INFINITY;
+	state.__zbuffer = malloc((state.__line_count + 1) * sizeof(*state.__zbuffer));
+
+	state.__px = state.px * mapS + mapS/2;
+	state.__py = state.py * mapS + mapS/2;
+	state.sprite.__sx = state.sprite.sx * mapS + mapS/2;
+	state.sprite.__sy = state.sprite.sy * mapS + mapS/2;
 
 	init_window();
-	read_texture(&state.wall_texture);
-	read_sprite(&state.monster_sprite);
-
+	read_texture(&state.north_texture);
+	read_texture(&state.south_texture);
+	read_texture(&state.east_texture);
+	read_texture(&state.west_texture);
+	read_sprite(&state.sprite);
 	render(&state);
-	mlx_loop(state.mlx);
+	mlx_loop(state.__mlx);
 }

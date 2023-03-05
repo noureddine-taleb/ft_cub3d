@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 18:08:36 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/05 13:57:07 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/05 19:08:23 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,100 +19,15 @@
 # include <unistd.h>
 # include <mlx.h>
 
-# define MAP ((*(int (*)[state.map_height][state.map_length])state.map))
+# define MAP(x, y) (state.map[y][x])
 
 #define mapS 32
 #define mapX(x) (x * mapS)
 #define mapY(y) (y * mapS)
 #define pS 8
 
-// # define WIDTH (1920)
 # define WIDTH (1570)
 # define HEIGHT (1080)
-
-enum wall_orientation {
-	w_in = -1,
-	w_out = 0,
-	w_horizontal = 1,
-	w_vertical = 2,
-};
-
-enum player_position {
-	north,
-	west,
-	east,
-	south,
-};
-
-typedef struct	s_map
-{
-	int		map_fd;
-	char	*north; // texture
-	char	*south;
-	char	*west;
-	char	*east;
-	int		f;
-	int		c;
-	int		nb_line;
-	char	**l_map;
-	enum player_position player_position;
-	int		player_x;
-	int		player_y;
-}	t_map;
-
-typedef struct s_frame {
-	void	*img;
-	char	*addr;
-	int		pixel_size;
-	int		line_size;
-	int		endian;
-}				t_frame;
-
-struct texture {
-	char *path;
-	void *img;
-	int width;
-	int height;
-};
-
-#define MAXSPRITES 20
-
-struct sprite {
-	char *path;
-	void *img;
-	int xs[MAXSPRITES];
-	int ys[MAXSPRITES];
-	int width;
-	int height;
-	int mx;
-	int my;
-	double dist;
-};
-
-typedef struct s_state {
-	void 		*mlx;
-	void		*win;
-	t_frame 	frame;
-	
-	// map
-	int *map;
-	int map_height;
-	int map_length;
-	
-	// player
-	int px;
-	int py;
-	double pa; // angle of the player
-	double fov;
-	double ray_offset;
-	int __line_count;
-	int __line_thickness;
-	double *zbuffer;
-	
-	// texture
-	struct texture wall_texture;
-	struct sprite  monster_sprite;
-} t_state;
 
 // format: 0xTTRRGGBB
 #define COLOR(t, r, g, b) (((int)t << 24) | ((int)r << 16) | ((int)g << 8) | ((int)b))
@@ -122,7 +37,96 @@ typedef struct s_state {
 #define YELLOW COLOR(0x00, 0xff, 0xff, 0x00)
 #define GREEN COLOR(0x00, 0x00, 0xff, 0x00)
 #define GREEN_DARK  COLOR(0x00, 0x00, 0x9f, 0x33)
-#define IS_WALL(val) (val == WHITE)
+// these macros use the minified x and y
+#define __IS_EMPTY(x, y) (x >= state.map_width || y >= state.map_height || x < 0 || y < 0)
+#define __IS_WALL(x, y) (MAP(x, y) == '1')
+#define __IS_SPACE(x, y) (MAP(x, y) == '0')
+
+enum terrain {
+	terrain_negative_space = -1,
+	terrain_wall = 0,
+	terrain_positive_space = 1,
+};
+
+enum orientation {
+	east = 0,
+	north = 1,
+	west = 2,
+	south = 3,
+};
+
+enum wall_orientation {
+	vertical,
+	horizontal,
+};
+
+struct ray_intersection {
+	int x, y;
+	enum wall_orientation orientation;
+	double dist;
+	double angle;
+};
+
+typedef struct s_frame {
+	void	*img;
+	char	*addr;
+	int		pixel_size;
+	int		line_size;
+	int		endian;
+} t_frame;
+
+struct texture {
+	char *path;
+	void *img;
+	int width;
+	int height;
+};
+
+struct sprite {
+	char *path;
+	void *img;
+	int width;
+	int height;
+	int sx;
+	int sy;
+	int __sx;
+	int __sy;
+};
+
+typedef struct s_state {
+	// map
+	int map_height;
+	int map_width;
+	char	**map;
+
+	// minilibc
+	void 		*__mlx;
+	void		*__win;
+	t_frame 	__frame;
+
+	// player
+	enum orientation initial_orientation;
+	int px;
+	int py;
+	int __px;
+	int __py;
+	double __pa; // angle of the player
+	double __fov;
+	double __ray_offset;
+	int __line_count;
+	int __line_thickness;
+
+	// texture
+	struct texture north_texture;
+	struct texture south_texture;
+	struct texture east_texture;
+	struct texture west_texture;
+	struct sprite  sprite;
+	int		f;		// floor color
+	int		c;		// ceiling color
+
+	struct ray_intersection *__zbuffer;
+} t_state;
 
 enum {
 	ON_KEYDOWN = 2,
@@ -159,16 +163,20 @@ enum {
 extern t_state state;
 
 void init_window();
-int	render(t_state *state);
-void draw_frame(t_state *state);
-void buffered_pixel_put(t_state *state, int x, int y, unsigned int color);
-void draw_map(t_state *state);
-void draw_3dscene(t_state *state);
-int is_wall(int x, int y);
-int set_player_pos(int x, int y);
+int	render();
+void draw_frame();
+void buffered_pixel_put(int x, int y, unsigned int color);
+void draw_map();
+void raycasting();
+void set_player_pos(int x, int y);
 void read_texture(struct texture *t);
 void read_sprite(struct sprite *t);
 int	img_pixel_read(struct texture *t, int x, int y);
-int is_monster(int x, int y);
+enum terrain map_terrain(int x, int y);
+double dist_from_origin(int x, int y);
+void rotate(double *x, double *y, double angle);
+void raycasting();
+void draw_sprite();
+void die(char *msg);
 
 #endif
