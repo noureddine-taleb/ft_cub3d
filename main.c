@@ -53,6 +53,7 @@ void parser() {
 	state.sprite.path = "./assets/monster.xpm";
 	state.sprite.sy = 2;
 	state.sprite.sx = 3;
+	state.sprite.__sz = 5;
 }
 
 int main() {

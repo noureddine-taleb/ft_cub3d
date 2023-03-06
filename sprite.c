@@ -1,42 +1,58 @@
 #include "cub3d.h"
 
+int should_display_sprite(double sx, double sy, double dist) {
+	if (sx < 0 || sy < 0 || sx >= WIDTH || sy >= HEIGHT)
+		return 0;
+
+	if (state.__zbuffer[(int)(sx / state.__line_thickness)].dist < dist)
+		return 0;
+
+	if (dist <= 0)
+		return 0;
+	
+	return 1;
+}
+
+void __draw_sprite(double sx, double sy, double dist) {
+	t_img *sprite = &state.sprite.img_attr;
+
+	double height = sprite->height * 30 / dist;
+	double width = sprite->width * 30 / dist;
+	// window
+	double startwx = sx - width/2;
+	double startwy = sy - height/2;
+	// texture
+	double tx = 0;
+	double ty = 0;
+	double dty = sprite->height / height;
+	double dtx = sprite->width / width;
+
+	for (int wx = startwx; wx < startwx + width && tx < sprite->width; wx++, tx += dtx) {
+		if (wx < 0 || wx >= WIDTH)
+			continue;
+		ty = 0;
+		for (int wy = startwy; wy < startwy + height && ty < sprite->height; wy++, ty += dty) {
+			if (wy < 0 || wy >= HEIGHT)
+				continue;
+			buffered_pixel_put(wx, wy, img_pixel_read(sprite, tx, ty));
+		}
+	}
+}
+
 void draw_sprite() {
 	struct sprite *sprite = &state.sprite;
-	double sx = sprite->sx - state.__px;
-	double sy = sprite->sy - state.__py;
-	double sz = 5;
+	double sx = sprite->__sx - state.__px;
+	double sy = sprite->__sy - state.__py;
+	double sz = sprite->__sz;
 
 	rotate(&sx, &sy, -state.__pa);
 	double dist = dist_from_origin(sx, sy);
-	double pixel_per_step = (WIDTH) / (state.__fov * dist);
+	double pixels_per_fov = WIDTH / (state.__fov * dist);
 	if (sx < 0)
 		return;
-	sx = sy * pixel_per_step + (WIDTH/2);
-	sy = sz * pixel_per_step + (HEIGHT/2);
+	sx = sy * pixels_per_fov + (WIDTH/2);
+	sy = sz * pixels_per_fov + (HEIGHT/2);
 
-	if (sx < 0 || sy < 0 || sx > WIDTH || sy > HEIGHT)
-		return;
-
-	if (state.__zbuffer[(int)(sx / state.__line_thickness)].dist < dist)
-		return;
-
-	if (dist <= 0)
-		return;
-
-	double height = sprite->img_attr.height * 30 / dist;
-	double width = sprite->img_attr.width * 30 / dist;
-	double startx = sx - width/2;
-	double starty = sy - height/2;
-	double dy = sprite->img_attr.height / height;
-	double dx = sprite->img_attr.width / width;
-	double tx = 0;
-	double ty = 0;
-	for (int x = startx; x < startx + width && tx < sprite->img_attr.width; x++, tx += dx) {
-		if (x < 0 || x >= WIDTH)
-			continue;
-		ty = 0;
-		for (int y = starty; y < starty + height && y < HEIGHT && ty < sprite->img_attr.height; y++, ty += dy) {
-			buffered_pixel_put(x, y, img_pixel_read(&sprite->img_attr, tx, ty));
-		}
-	}
+	if (should_display_sprite(sx, sy, dist))
+		__draw_sprite(sx, sy, dist);
 }

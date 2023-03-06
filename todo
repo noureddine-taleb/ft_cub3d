@@ -6,5 +6,6 @@ fix glitches
 support different textures for each side of the wall
 doors
 refactoring
+enable key repeat
 norm
 memory leaks

@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 18:08:36 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/06 12:35:08 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/06 13:31:32 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ struct sprite {
 	int sy;
 	int __sx;
 	int __sy;
+	int __sz;
 };
 
 typedef struct s_state {
