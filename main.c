@@ -31,7 +31,7 @@ void parser() {
 
 	state.map[0] = "11111111";
 	state.map[1] = "10100001";
-	state.map[2] = "10100001";
+	state.map[2] = "10200001";
 	state.map[3] = "10100001";
 	state.map[4] = "10000001";
 	state.map[5] = "10000101";

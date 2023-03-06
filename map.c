@@ -5,6 +5,8 @@ void draw_map_pixel(int x, int y) {
 		for (int i = mapX(x); i < mapX(x) + mapS; i++) {
 			if (__IS_WALL(x, y))
 				buffered_pixel_put(i, j, WHITE);
+			else if (__IS_DOOR(x, y))
+				buffered_pixel_put(i, j, YELLOW);
 			else
 				buffered_pixel_put(i, j, BLACK);
 		}
@@ -14,8 +16,13 @@ void draw_map_pixel(int x, int y) {
 void draw_ray(double x, double y, double angle, int color) {
 	double dx = cos(angle);
 	double dy = sin(angle);
+	double x0 = x;
+	double y0 = y;
 
-	while (map_terrain(x, y) == terrain_positive_space) {
+	while (map_terrain(x, y) == terrain_positive_space 
+	|| (map_terrain(x, y) == terrain_door 
+		&& dist_from_origin(DEFLATE(x)-DEFLATE(x0), DEFLATE(y)-DEFLATE(y0)) <= 1)
+	) {
 		buffered_pixel_put(x, y, color);
 		x += dx;
 		y += dy;
@@ -31,6 +38,9 @@ enum terrain map_terrain(int x, int y) {
 
 	if (__IS_WALL(x, y))
 		return terrain_wall;
+
+	if (__IS_DOOR(x, y))
+		return terrain_door;
 
 	return terrain_positive_space;
 }

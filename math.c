@@ -1,6 +1,6 @@
 #include "cub3d.h"
 
-double dist_from_origin(int x, int y) {
+double dist_from_origin(double x, double y) {
 	return sqrt(x*x + y*y);
 }
 

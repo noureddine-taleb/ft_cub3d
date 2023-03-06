@@ -26,7 +26,9 @@ static struct ray_intersection cast_ray_vertical(double angle) {
 		intersection.x = intersection.y / m;
 	}
 	if (sin(angle)) {
-		while (map_terrain(intersection.x + x0, intersection.y + y0) == terrain_positive_space) {
+		while (map_terrain(intersection.x + x0, intersection.y + y0) == terrain_positive_space
+			|| (map_terrain(intersection.x + x0, intersection.y + y0) == terrain_door && dist_from_origin(intersection.x, intersection.y) <= (mapS))
+		) {
 			if (NORTH(angle)) {
 				intersection.y -= mapS;
 				intersection.x = intersection.y / m;
@@ -59,7 +61,9 @@ static struct ray_intersection cast_ray_horizontal(double angle) {
 		intersection.y = m * intersection.x;
 	}
 	if (cos(angle)) {
-		while (map_terrain(intersection.x + x0, intersection.y + y0) == terrain_positive_space) {
+		while (map_terrain(intersection.x + x0, intersection.y + y0) == terrain_positive_space
+			|| (map_terrain(intersection.x + x0, intersection.y + y0) == terrain_door && dist_from_origin(intersection.x, intersection.y) <= (mapS*2))
+		) {
 			if (WEST(angle)) {
 				intersection.x -= mapS;
 				intersection.y = m * intersection.x;

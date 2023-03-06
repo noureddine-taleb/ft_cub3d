@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 18:08:36 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/06 14:21:36 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/06 20:11:31 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@
 # define MAP(x, y) (state.map[y][x])
 
 #define mapS 32
-#define mapX(x) (x * mapS)
-#define mapY(y) (y * mapS)
+#define mapX(x) ((x) * mapS)
+#define mapY(y) ((y) * mapS)
 #define pS 8
 
 // # define WIDTH (1570)
@@ -41,13 +41,16 @@
 #define GREEN_DARK  COLOR(0x00, 0x00, 0x9f, 0x33)
 // these macros use the minified x and y
 #define __IS_EMPTY(x, y) (x >= state.map_width || y >= state.map_height || x < 0 || y < 0)
-#define __IS_WALL(x, y) (MAP(x, y) == '1')
 #define __IS_SPACE(x, y) (MAP(x, y) == '0')
+#define __IS_WALL(x, y) (MAP(x, y) == '1')
+#define __IS_DOOR(x, y) (MAP(x, y) == '2')
+#define DEFLATE(v) (((int)(v))/mapS)
 
 enum terrain {
 	terrain_negative_space = -1,
 	terrain_wall = 0,
 	terrain_positive_space = 1,
+	terrain_door = 2,
 };
 
 enum orientation {
@@ -174,7 +177,7 @@ void set_player_pos(int x, int y);
 void read_img_from_xpm(char *xpm, t_img *img);
 int	img_pixel_read(t_img *t, int x, int y);
 enum terrain map_terrain(int x, int y);
-double dist_from_origin(int x, int y);
+double dist_from_origin(double x, double y);
 void rotate(double *x, double *y, double angle);
 void raycasting();
 void draw_sprite();
