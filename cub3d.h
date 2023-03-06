@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 18:08:36 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/06 20:15:15 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/06 20:34:36 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,7 @@ typedef struct s_state {
 	struct texture south_texture;
 	struct texture east_texture;
 	struct texture west_texture;
+	struct texture door_texture;
 	struct sprite  sprite;
 	int		f;		// floor color
 	int		c;		// ceiling color

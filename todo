@@ -1,13 +1,15 @@
 bound check for image accesses (textures)
-doors
+door texture
+animate the sprite
 use the bigger map
 fix a scratch in the screen
-make the map transparent
 refactoring
 norm
 memory leaks
+make the map transparent
 
 parser
+width/height sprite doors
 fill map width
 append spaces to to make all line with the same width
 door texture ob

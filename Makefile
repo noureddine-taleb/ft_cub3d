@@ -1,6 +1,6 @@
 MINILIBX_DIR := minilibx
 MINILIBX := $(MINILIBX_DIR)/libmlx.a
-TARGET := cub3d
+TARGET := cub3D
 SRCS := draw.c cub3d.c window.c raycaster.c map.c player.c sprite.c math.c \
 			parser/parsing/mandatory/check_map.c \
 			parser/parsing/gnl/get_next_line.c \
