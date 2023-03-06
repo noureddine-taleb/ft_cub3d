@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 18:08:36 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/06 13:31:32 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/06 14:18:54 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@
 
 # define WIDTH (1570)
 # define HEIGHT (1080)
+// # define WIDTH (1570+1300)
+// # define HEIGHT (1080+340)
 
 // format: 0xTTRRGGBB
 #define COLOR(t, r, g, b) (((int)t << 24) | ((int)r << 16) | ((int)g << 8) | ((int)b))

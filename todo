@@ -1,11 +1,9 @@
-integrate parser attributes
-maybe we need to protect the image access
+bound check for image accesses (textures)
+doors
+increase screen width, height
+use the bigger map
 fix a scratch in the screen
 make the map transparent
-fix glitches
-support different textures for each side of the wall
-doors
 refactoring
-enable key repeat
 norm
 memory leaks

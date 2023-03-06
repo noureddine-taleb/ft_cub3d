@@ -82,6 +82,7 @@ void init_window() {
 	init_frame(&state, &state.__frame);
 	state.__win = mlx_new_window(state.__mlx, WIDTH, HEIGHT, "cub3d");
 	mlx_key_hook(state.__win, key_press, &state);
+	mlx_do_key_autorepeaton(state.__mlx);
 	mlx_mouse_hook(state.__win, mouse_event, &state);
 	mlx_hook(state.__win, ON_DESTROY, 0, destroy, &state);
 }
