@@ -1,6 +1,5 @@
 bound check for image accesses (textures)
 doors
-increase screen width, height
 use the bigger map
 fix a scratch in the screen
 make the map transparent
