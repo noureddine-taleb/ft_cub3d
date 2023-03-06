@@ -6,3 +6,9 @@ make the map transparent
 refactoring
 norm
 memory leaks
+
+parser
+fill map width
+append spaces to to make all line with the same width
+door texture ob
+sprite texture ob
