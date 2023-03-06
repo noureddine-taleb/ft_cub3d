@@ -1,4 +1,6 @@
 integrate parser attributes
+maybe we need to protect the image access
+fix a scratch in the screen
 make the map transparent
 fix glitches
 support different textures for each side of the wall

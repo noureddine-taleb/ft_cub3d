@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 18:08:36 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/05 19:08:23 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/06 12:35:08 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,26 +67,25 @@ struct ray_intersection {
 	double angle;
 };
 
-typedef struct s_frame {
+typedef struct s_img {
 	void	*img;
 	char	*addr;
-	int		pixel_size;
-	int		line_size;
-	int		endian;
+	int width;
+	int height;
+} t_img;
+
+typedef struct s_frame {
+	t_img img_attr;
 } t_frame;
 
 struct texture {
 	char *path;
-	void *img;
-	int width;
-	int height;
+	t_img img_attr;
 };
 
 struct sprite {
 	char *path;
-	void *img;
-	int width;
-	int height;
+	t_img img_attr;
 	int sx;
 	int sy;
 	int __sx;
@@ -169,9 +168,8 @@ void buffered_pixel_put(int x, int y, unsigned int color);
 void draw_map();
 void raycasting();
 void set_player_pos(int x, int y);
-void read_texture(struct texture *t);
-void read_sprite(struct sprite *t);
-int	img_pixel_read(struct texture *t, int x, int y);
+void read_img_from_xpm(char *xpm, t_img *img);
+int	img_pixel_read(t_img *t, int x, int y);
 enum terrain map_terrain(int x, int y);
 double dist_from_origin(int x, int y);
 void rotate(double *x, double *y, double angle);

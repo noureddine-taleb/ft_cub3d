@@ -96,13 +96,13 @@ static struct texture *get_texture(struct ray_intersection *intersection) {
 		return &state.south_texture;
 	else if (WEST(intersection->angle) && intersection->orientation == vertical)
 		return &state.west_texture;
-	printf("undefined behaviour\n");
+	die("can't find appropriate texture for the intersection point");
 	return NULL; // unreachable anyway
 }
 
 static void draw_horizontal_line(int i) {
 	struct ray_intersection *intersection = &state.__zbuffer[i];
-	struct texture *texture = get_texture(intersection);
+	t_img *texture = &get_texture(intersection)->img_attr;
 
 	if (i >= state.__line_count)
 		return;

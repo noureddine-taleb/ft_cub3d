@@ -84,11 +84,12 @@ int main() {
 	state.sprite.__sy = state.sprite.sy * mapS + mapS/2;
 
 	init_window();
-	read_texture(&state.north_texture);
-	read_texture(&state.south_texture);
-	read_texture(&state.east_texture);
-	read_texture(&state.west_texture);
-	read_sprite(&state.sprite);
+	read_img_from_xpm(state.north_texture.path, &state.north_texture.img_attr);
+	read_img_from_xpm(state.south_texture.path, &state.south_texture.img_attr);
+	read_img_from_xpm(state.west_texture.path, &state.west_texture.img_attr);
+	read_img_from_xpm(state.east_texture.path, &state.east_texture.img_attr);
+	read_img_from_xpm(state.sprite.path, &state.sprite.img_attr);
+
 	render(&state);
 	mlx_loop(state.__mlx);
 }

@@ -7,14 +7,16 @@
 
 void	init_frame(t_state *vars, t_frame *f)
 {
-	f->img = mlx_new_image(vars->__mlx, WIDTH, HEIGHT);
-	f->addr = mlx_get_data_addr(f->img, &f->pixel_size, &f->line_size, &f->endian);
-	f->pixel_size /= 8;
+	int scratch;
+	f->img_attr.width = WIDTH;
+	f->img_attr.height = HEIGHT;
+	f->img_attr.img = mlx_new_image(vars->__mlx, WIDTH, HEIGHT);
+	f->img_attr.addr = mlx_get_data_addr(f->img_attr.img, &scratch, &scratch, &scratch);
 }
 
 int	destroy(t_state *state)
 {
-	mlx_destroy_image(state->__mlx, state->__frame.img);
+	mlx_destroy_image(state->__mlx, state->__frame.img_attr.img);
 	mlx_destroy_window(state->__mlx, state->__win);
 	exit(0);
 }
@@ -87,22 +89,41 @@ void init_window() {
 void	buffered_pixel_put(int x, int y, unsigned int color)
 {
 	char	*dst;
+	t_img *frame_img;
 
+	frame_img = &state.__frame.img_attr;
 	if (color & 0xff000000)
 		return;
-	dst = state.__frame.addr + (y * state.__frame.line_size
-			+ x * (state.__frame.pixel_size));
+	dst = frame_img->addr + ((y * frame_img->width + x) * 4);
 	*(unsigned int *)dst = color;
+}
+
+void read_img_from_xpm(char *xpm, t_img *img) {
+	int dummy;
+	img->img = mlx_xpm_file_to_image(state.__mlx, xpm, &img->width, &img->height);
+	if (!img->img)
+		die("can't open the img file");
+	img->addr = mlx_get_data_addr(img->img, &dummy, &dummy, &dummy);
+}
+
+int	img_pixel_read(t_img *img, int x, int y) {
+	char	*dst;
+
+	dst = img->addr + (y * img->width + x) * 4;
+	return *(unsigned int *)dst;
 }
 
 void	flush_frame()
 {
-	mlx_put_image_to_window(state.__mlx, state.__win, state.__frame.img, 0, 0);
+	mlx_put_image_to_window(state.__mlx, state.__win, state.__frame.img_attr.img, 0, 0);
 }
 
 void reset_frame() {
 	#include <string.h>
-	memset(state.__frame.addr, 0, state.__frame.line_size * HEIGHT); // TODO: to remove
+	t_img *frame_img;
+
+	frame_img = &state.__frame.img_attr;
+	memset(state.__frame.img_attr.addr, 0, frame_img->width * frame_img->height * 4); // TODO: to remove
 }
 
 int	render()
