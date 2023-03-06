@@ -56,21 +56,29 @@ void parser() {
 	state.sprite.__sz = 5;
 }
 
-int main() {
-	parser();
-	// char *str;
-	// for (int i = 0; i < state.map_width; i++) {
-	// 	printf("%c", str[i]);
-	// }
-	// printf("%s\n", state.map[1]);
-	// exit(1);
-	// for (int j = 0; j < state.map_height; j++) {
-	// 	for (int i = 0; i < state.map_width; i++) {
-	// 		printf("%c", MAP(i, j));
-	// 	}
-	// 	printf("\n");
-	// }
-	// exit(1);
+void print_state() {
+	printf("map_height: %d\n", state.map_height);
+	printf("map_width: %d\n", state.map_width);
+	printf("map: %p\n", state.map);
+	printf("map: %d\n", state.initial_orientation);
+	printf("px: %d\n", state.px);
+	printf("py: %d\n", state.py);
+	printf("north_texture: %s\n", state.north_texture.path);
+	printf("south_texture: %s\n", state.south_texture.path);
+	printf("east_texture: %s\n", state.east_texture.path);
+	printf("west_texture: %s\n", state.west_texture.path);
+	printf("sprite: %s\n", state.sprite.path);
+	printf("f: %d\n", state.f);
+	printf("c: %d\n", state.c);
+	printf("elem: %d\n", state.elem);
+	printf("flag: %d\n", state.flag);
+}
+
+void draw() {
+	// parser();
+	print_state();
+	exit(1);
+
 	state.__fov = M_PI / 2;
 	state.__ray_offset = 0.001;
 	state.__pa = -(M_PI / 2) * state.initial_orientation;

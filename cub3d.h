@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
+/*   By: abihe <abihe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 18:08:36 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/06 14:21:36 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/06 19:16:56 by abihe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdio.h>
 # include <math.h>
 # include <unistd.h>
+# include <fcntl.h>
 # include <mlx.h>
 
 # define MAP(x, y) (state.map[y][x])
@@ -128,6 +129,9 @@ typedef struct s_state {
 	int		c;		// ceiling color
 
 	struct ray_intersection *__zbuffer;
+
+	int		elem;
+	int		flag;
 } t_state;
 
 enum {
@@ -164,6 +168,45 @@ enum {
 
 extern t_state state;
 
+// parser
+
+//gnl
+char	*get_next_line(int fd);
+char	*ft_get_line(int fd, char *str);
+int		ft_strchr(char *str, int c);
+char	*ft_strjoin(char *str1, char *str2);
+int		ft_strlen(char *str);
+char	*ft_strdup(char *s1);
+//pars
+char	**ft_split(const char *s, char c);
+char	*ft_strrchr(const char *str, int ch);
+char	*skip_sp(char *line);
+char	*set_texture(char *line);
+char	*skip_sp(char *line);
+int		ft_atoi(const char *str);
+int		is_map_char(char c);
+int		is_play(char pl);
+int		if_all_empty(t_state *map);
+int		if_textures_filled(t_state *map);
+int		if_colors_filled(t_state *map);
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
+int		set_colors(char *line);
+int		size_l(char *line, int j);
+int		is_map(char *line);
+void	ft_error(char *msg);
+void	check_filename(char *name);
+void	ft_init(t_state *map);
+void	set_map(char *file, t_state *map);
+void	p_pos(t_state *map, int i, int j);
+void	fill_colors(char *line, t_state *map);
+int		fill_textures(char *line, t_state *map);
+void	all_ele_fil(t_state *map, char *line);
+void	init_map(char *line, t_state *map);
+void	inside_map(t_state *map);
+void	map_elem(char *line, t_state *map);
+void	free_double(char **str);
+
+// execution
 void init_window();
 int	render();
 void draw_frame();
@@ -179,5 +222,6 @@ void rotate(double *x, double *y, double angle);
 void raycasting();
 void draw_sprite();
 void die(char *msg);
+void draw();
 
 #endif
