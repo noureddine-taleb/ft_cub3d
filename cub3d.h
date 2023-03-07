@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 18:08:36 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/07 11:09:08 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/07 15:20:13 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,12 @@ struct sprite {
 	t_img img_attr;
 	int sx;
 	int sy;
+	int cols;
+	int rows;
+	int __x_off;
+	int __y_off;
+	int __unit_width;
+	int __unit_height;
 	int __sx;
 	int __sy;
 	int __sz;

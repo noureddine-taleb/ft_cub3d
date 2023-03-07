@@ -28,10 +28,12 @@ void parser_stub() {
 	state.map_width = 8;
 
 	state.door_texture.path = "./assets/door2.xpm";
-	state.sprite.path = "./assets/monster.xpm";
+	state.sprite.path = "./assets/mushroom_cloud.xpm";
 	state.sprite.sy = 2;
 	state.sprite.sx = 3;
 	state.sprite.__sz = 5;
+	state.sprite.rows = 4;
+	state.sprite.cols = 5;
 }
 
 void draw() {
@@ -58,6 +60,11 @@ void draw() {
 	read_img_from_xpm(state.east_texture.path, &state.east_texture.img_attr);
 	read_img_from_xpm(state.sprite.path, &state.sprite.img_attr);
 	read_img_from_xpm(state.door_texture.path, &state.door_texture.img_attr);
+
+	state.sprite.__x_off = 0;
+	state.sprite.__y_off = 0;
+	state.sprite.__unit_width = state.sprite.img_attr.width / state.sprite.cols;
+	state.sprite.__unit_height = state.sprite.img_attr.height / state.sprite.rows;
 
 	render(&state);
 	mlx_loop(state.__mlx);

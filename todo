@@ -1,8 +1,10 @@
-increase textures quality
-animate the sprite
-fix a scratch in the screen
 norm
 memory leaks
+fix a scratch in the screen
+
+possible improvement:
+increase textures quality
+fix glitches
 make the map transparent
 
 parser
