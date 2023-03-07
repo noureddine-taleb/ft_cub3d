@@ -1,9 +1,6 @@
-bound check for image accesses (textures)
 door texture
 animate the sprite
-use the bigger map
 fix a scratch in the screen
-refactoring
 norm
 memory leaks
 make the map transparent

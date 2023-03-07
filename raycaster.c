@@ -104,59 +104,50 @@ static struct texture *get_texture(struct ray_intersection *intersection) {
 	return NULL; // unreachable anyway
 }
 
+static void draw_wall(struct ray_intersection *intersection, double height, int startwx, int startwy) {
+	t_img *wall_texture = &get_texture(intersection)->img_attr;
+	double dty = (double)wall_texture->height / height;
+
+	double tx;
+	if (intersection->orientation == vertical)
+		tx = intersection->y % (mapS) / (double)mapS * wall_texture->width;
+	else
+		tx = intersection->x % (mapS) / (double)mapS * wall_texture->width;
+	double ty;
+	for (int wx = startwx; wx < startwx + state.__line_thickness; wx++) {
+		ty = 0;
+		for (int wy = startwy; wy < startwy + height; wy++, ty += dty) {
+			buffered_pixel_put(wx, wy, img_pixel_read(wall_texture, tx, ty));
+		}
+	}
+}
+
+static void draw_bg(double height, int startwx, int startwy) {
+	// sky or ceiling
+	for (int wx = startwx; wx < startwx + state.__line_thickness; wx++) {
+		for (int wy = 0; wy < startwy; wy++) {
+			buffered_pixel_put(wx, wy, state.c);
+		}
+	}
+	// ground
+	for (int wx = startwx; wx < startwx + state.__line_thickness; wx++) {
+		for (int wy = startwy + height; wy >= 0 && wy < HEIGHT; wy++) {
+			buffered_pixel_put(wx, wy, state.f);
+		}
+	}
+}
+
 static void draw_horizontal_line(int i) {
 	struct ray_intersection *intersection = &state.__zbuffer[i];
-	t_img *texture = &get_texture(intersection)->img_attr;
 
-	if (i >= state.__line_count)
+	if (i <0 || i >= state.__line_count)
 		return;
 
 	double height = dist_to_wall_size(intersection->dist, intersection->angle);
 	int startwx = i * state.__line_thickness;
 	int startwy = (HEIGHT/2) - height/2;
-	// double startty = 0;
-	double dty = (double)texture->height / height;
-	// if (startwy < 0) {
-	// 	startty = -startwy * dty;
-	// 	startwy = 0;
-	// }
-	// sky or ceiling
-	for (int wx = startwx; wx < startwx + state.__line_thickness; wx++) {
-		if (wx < 0 || wx >= WIDTH)
-			continue;
-		for (int wy = 0; wy < startwy; wy++) {
-			if (wy < 0 || wy >= HEIGHT)
-				continue;
-			buffered_pixel_put(wx, wy, state.c);
-		}
-	}
-	// walls
-	int tx;
-	if (intersection->orientation == vertical)
-		tx = intersection->y % (mapS) / (double)mapS * texture->width;
-	else
-		tx = intersection->x % (mapS) / (double)mapS * texture->width;
-	double ty;
-	for (int wx = startwx; wx < startwx + state.__line_thickness; wx++) {
-		if (wx < 0 || wx >= WIDTH)
-			continue;
-		ty = 0;
-		for (int wy = startwy; wy < startwy + height; wy++, ty+=dty) {
-			if (wy < 0 || wy >= HEIGHT)
-				continue;
-			buffered_pixel_put(wx, wy, img_pixel_read(texture, tx, ty));
-		}
-	}
-	// ground
-	for (int wx = startwx; wx < startwx + state.__line_thickness; wx++) {
-		if (wx < 0 || wx >= WIDTH)
-			continue;
-		for (int wy = startwy + height; wy >= 0 && wy < HEIGHT; wy++) {
-			if (wy < 0 || wy >= HEIGHT)
-				continue;
-			buffered_pixel_put(wx, wy, state.f);
-		}
-	}
+	draw_bg(height, startwx, startwy);
+	draw_wall(intersection, height, startwx, startwy);
 }
 
 void raycasting() {

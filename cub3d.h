@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 18:08:36 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/06 20:34:36 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/07 11:09:08 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@
 #define YELLOW COLOR(0x00, 0xff, 0xff, 0x00)
 #define GREEN COLOR(0x00, 0x00, 0xff, 0x00)
 #define GREEN_DARK  COLOR(0x00, 0x00, 0x9f, 0x33)
+#define ERROR_COLOR  COLOR(0xff, 0x00, 0x00, 0x00)
+#define IS_ERROR_COLOR(c)  (c & COLOR(0xff, 0x00, 0x00, 0x00))
 // these macros use the minified x and y
 #define __IS_EMPTY(x, y) (x >= state.map_width || y >= state.map_height || x < 0 || y < 0)
 #define __IS_SPACE(x, y) (MAP(x, y) == '0')

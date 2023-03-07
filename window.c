@@ -93,7 +93,9 @@ void	buffered_pixel_put(int x, int y, unsigned int color)
 	t_img *frame_img;
 
 	frame_img = &state.__frame.img_attr;
-	if (color & 0xff000000)
+	if (IS_ERROR_COLOR(color))
+		return;
+	if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT)
 		return;
 	dst = frame_img->addr + ((y * frame_img->width + x) * 4);
 	*(unsigned int *)dst = color;
@@ -110,6 +112,8 @@ void read_img_from_xpm(char *xpm, t_img *img) {
 int	img_pixel_read(t_img *img, int x, int y) {
 	char	*dst;
 
+	if (x < 0 || x >= img->width || y < 0 || y >= img->height)
+		return ERROR_COLOR;
 	dst = img->addr + (y * img->width + x) * 4;
 	return *(unsigned int *)dst;
 }

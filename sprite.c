@@ -27,13 +27,9 @@ void __draw_sprite(double sx, double sy, double dist) {
 	double dty = sprite->height / height;
 	double dtx = sprite->width / width;
 
-	for (int wx = startwx; wx < startwx + width && tx < sprite->width; wx++, tx += dtx) {
-		if (wx < 0 || wx >= WIDTH)
-			continue;
+	for (int wx = startwx; wx < startwx + width; wx++, tx += dtx) {
 		ty = 0;
-		for (int wy = startwy; wy < startwy + height && ty < sprite->height; wy++, ty += dty) {
-			if (wy < 0 || wy >= HEIGHT)
-				continue;
+		for (int wy = startwy; wy < startwy + height; wy++, ty += dty) {
 			buffered_pixel_put(wx, wy, img_pixel_read(sprite, tx, ty));
 		}
 	}
