@@ -30,8 +30,8 @@ void draw_ray(double x, double y, double angle, int color) {
 }
 
 enum terrain map_terrain(int x, int y) {
-	x /= mapS;
-	y /= mapS;
+	x = DEFLATE(x);
+	y = DEFLATE(y);
 
 	if (__IS_EMPTY(x, y))
 		return terrain_negative_space;

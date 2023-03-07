@@ -92,6 +92,8 @@ static void cast_ray(struct ray_intersection *intersection) {
 }
 
 static struct texture *get_texture(struct ray_intersection *intersection) {
+	if (map_terrain(intersection->x, intersection->y) == terrain_door)
+		return &state.door_texture;
 	if (NORTH(intersection->angle) && intersection->orientation == horizontal)
 		return &state.north_texture;
 	else if (EAST(intersection->angle) && intersection->orientation == vertical)
@@ -100,13 +102,15 @@ static struct texture *get_texture(struct ray_intersection *intersection) {
 		return &state.south_texture;
 	else if (WEST(intersection->angle) && intersection->orientation == vertical)
 		return &state.west_texture;
-	die("can't find appropriate texture for the intersection point");
-	return NULL; // unreachable anyway
+	die("unreachable: can't find appropriate texture for the intersection point");
+	return NULL;
 }
 
 static void draw_wall(struct ray_intersection *intersection, double height, int startwx, int startwy) {
 	t_img *wall_texture = &get_texture(intersection)->img_attr;
 	double dty = (double)wall_texture->height / height;
+	double dtx = 0;
+	// double dtx = ((double)wall_texture->width / mapS) / state.__line_thickness;
 
 	double tx;
 	if (intersection->orientation == vertical)
@@ -114,7 +118,7 @@ static void draw_wall(struct ray_intersection *intersection, double height, int 
 	else
 		tx = intersection->x % (mapS) / (double)mapS * wall_texture->width;
 	double ty;
-	for (int wx = startwx; wx < startwx + state.__line_thickness; wx++) {
+	for (int wx = startwx; wx < startwx + state.__line_thickness; wx++, tx += dtx) {
 		ty = 0;
 		for (int wy = startwy; wy < startwy + height; wy++, ty += dty) {
 			buffered_pixel_put(wx, wy, img_pixel_read(wall_texture, tx, ty));

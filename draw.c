@@ -27,7 +27,7 @@ void parser_stub() {
 	print_state();
 	state.map_width = 8;
 
-	state.door_texture.path = "./assets/0001.xpm";
+	state.door_texture.path = "./assets/door2.xpm";
 	state.sprite.path = "./assets/monster.xpm";
 	state.sprite.sy = 2;
 	state.sprite.sx = 3;

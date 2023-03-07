@@ -1,14 +1,14 @@
-NO ./assets/0001.xpm
-SO ./assets/0001.xpm
-WE ./assets/0001.xpm
-EA ./assets/0001.xpm
+NO ./assets/north2.xpm
+SO ./assets/south2.xpm
+WE ./assets/west2.xpm
+EA ./assets/east2.xpm
 
 C 102,178,255
 F 192,192,192
 
 11111111
 10100001
-10100W01
+10200W01
 10100001
 10000001
 10000101
