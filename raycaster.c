@@ -111,38 +111,50 @@ static void draw_horizontal_line(int i) {
 	if (i >= state.__line_count)
 		return;
 
-	double len = dist_to_wall_size(intersection->dist, intersection->angle);
-	int startx = i * state.__line_thickness;
-	int starty = (HEIGHT/2) - len/2;
-	double initTextureY = 0;
-	double stepy = (double)texture->height / len;
-	if (starty < 0) {
-		initTextureY = -starty * stepy;
-		starty = 0;
-	}
+	double height = dist_to_wall_size(intersection->dist, intersection->angle);
+	int startwx = i * state.__line_thickness;
+	int startwy = (HEIGHT/2) - height/2;
+	// double startty = 0;
+	double dty = (double)texture->height / height;
+	// if (startwy < 0) {
+	// 	startty = -startwy * dty;
+	// 	startwy = 0;
+	// }
 	// sky or ceiling
-	for (int col = startx; col < startx + state.__line_thickness; col++) {
-		for (int row = 0; row < starty; row++) {
-			buffered_pixel_put(col, row, state.c);
+	for (int wx = startwx; wx < startwx + state.__line_thickness; wx++) {
+		if (wx < 0 || wx >= WIDTH)
+			continue;
+		for (int wy = 0; wy < startwy; wy++) {
+			if (wy < 0 || wy >= HEIGHT)
+				continue;
+			buffered_pixel_put(wx, wy, state.c);
 		}
 	}
 	// walls
-	int x;
+	int tx;
 	if (intersection->orientation == vertical)
-		x = intersection->y % (mapS) / (double)mapS * texture->width;
+		tx = intersection->y % (mapS) / (double)mapS * texture->width;
 	else
-		x = intersection->x % (mapS) / (double)mapS * texture->width;
-	double y;
-	for (int col = startx; col < startx + state.__line_thickness; col++) {
-		y = initTextureY;
-		for (int row = starty; (row < starty + len) && row < HEIGHT; row++, y+=stepy) {
-			buffered_pixel_put(col, row, img_pixel_read(texture, x, y));
+		tx = intersection->x % (mapS) / (double)mapS * texture->width;
+	double ty;
+	for (int wx = startwx; wx < startwx + state.__line_thickness; wx++) {
+		if (wx < 0 || wx >= WIDTH)
+			continue;
+		ty = 0;
+		for (int wy = startwy; wy < startwy + height; wy++, ty+=dty) {
+			if (wy < 0 || wy >= HEIGHT)
+				continue;
+			buffered_pixel_put(wx, wy, img_pixel_read(texture, tx, ty));
 		}
 	}
 	// ground
-	for (int col = startx; col < (startx + state.__line_thickness) && col >= 0 && col < WIDTH; col++) {
-		for (int row = starty + len; row >= 0 && row < HEIGHT; row++) {
-			buffered_pixel_put(col, row, state.f);
+	for (int wx = startwx; wx < startwx + state.__line_thickness; wx++) {
+		if (wx < 0 || wx >= WIDTH)
+			continue;
+		for (int wy = startwy + height; wy >= 0 && wy < HEIGHT; wy++) {
+			if (wy < 0 || wy >= HEIGHT)
+				continue;
+			buffered_pixel_put(wx, wy, state.f);
 		}
 	}
 }
