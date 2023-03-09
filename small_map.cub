@@ -1,7 +1,7 @@
-NO ./assets/north.xpm
+NO ./assets/0001.xpm
 SO ./assets/south.xpm
-WE ./assets/west.xpm
-EA ./assets/east.xpm
+WE ./assets/east.xpm
+EA ./assets/wall_texture.xpm
 
 C 102,178,255
 F 192,192,192

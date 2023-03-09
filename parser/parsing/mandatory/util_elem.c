@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   util_elem.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abihe <abihe@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 18:14:31 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/06 19:23:56 by abihe            ###   ########.fr       */
+/*   Updated: 2023/03/08 15:27:41 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	is_map(char *line)
 	return (0);
 }
 
-enum orientation char_to_or(char c)
+enum e_direction char_to_or(char c)
 {
 	if (c == 'N')
 		return (north);

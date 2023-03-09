@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 18:08:36 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/07 15:20:13 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/09 15:26:13 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,131 +20,115 @@
 # include <fcntl.h>
 # include <mlx.h>
 
-# define MAP(x, y) (state.map[y][x])
+# define MAPS 32
+# define PS 8
 
-#define mapS 32
-#define mapX(x) ((x) * mapS)
-#define mapY(y) ((y) * mapS)
-#define pS 8
+# define WIDTH (2870)
+# define HEIGHT (1420)
 
-// # define WIDTH (1570)
-// # define HEIGHT (1080)
-# define WIDTH (1570+1300)
-# define HEIGHT (1080+340)
-
-// format: 0xTTRRGGBB
-#define COLOR(t, r, g, b) (((int)t << 24) | ((int)r << 16) | ((int)g << 8) | ((int)b))
-#define RED    COLOR(0x00, 0xff, 0x00, 0x00)
-#define BLACK  COLOR(0x00, 0x00, 0x00, 0x00)
-#define WHITE  COLOR(0x00, 0xff, 0xff, 0xff)
-#define YELLOW COLOR(0x00, 0xff, 0xff, 0x00)
-#define GREEN COLOR(0x00, 0x00, 0xff, 0x00)
-#define GREEN_DARK  COLOR(0x00, 0x00, 0x9f, 0x33)
-#define ERROR_COLOR  COLOR(0xff, 0x00, 0x00, 0x00)
-#define IS_ERROR_COLOR(c)  (c & COLOR(0xff, 0x00, 0x00, 0x00))
-// these macros use the minified x and y
-#define __IS_EMPTY(x, y) (x >= state.map_width || y >= state.map_height || x < 0 || y < 0)
-#define __IS_SPACE(x, y) (MAP(x, y) == '0')
-#define __IS_WALL(x, y) (MAP(x, y) == '1')
-#define __IS_DOOR(x, y) (MAP(x, y) == '2')
-#define DEFLATE(v) (((int)(v))/mapS)
-
-enum terrain {
+enum e_terrain {
 	terrain_negative_space = -1,
 	terrain_wall = 0,
 	terrain_positive_space = 1,
 	terrain_door = 2,
 };
 
-enum orientation {
+enum e_direction {
 	east = 0,
 	north = 1,
 	west = 2,
 	south = 3,
 };
 
-enum wall_orientation {
+enum e_orientation {
 	vertical,
 	horizontal,
 };
 
-struct ray_intersection {
-	int x, y;
-	enum wall_orientation orientation;
-	double dist;
-	double angle;
+typedef struct s_int_point {
+	int x;
+	int y;
+} t_int_point;
+
+typedef struct s_point {
+	double	x;
+	double	y;
+	double	z;
+}	t_point;
+
+struct s_ray_intersection {
+	t_point					p;
+	enum e_orientation		orientation;
+	double					dist;
+	double					angle;
 };
 
 typedef struct s_img {
 	void	*img;
 	char	*addr;
-	int width;
-	int height;
-} t_img;
+	int		width;
+	int		height;
+}	t_img;
 
 typedef struct s_frame {
-	t_img img_attr;
-} t_frame;
+	t_img	img_attr;
+}	t_frame;
 
-struct texture {
-	char *path;
-	t_img img_attr;
+struct s_texture {
+	char	*path;
+	t_img	img_attr;
 };
 
-struct sprite {
-	char *path;
-	t_img img_attr;
-	int sx;
-	int sy;
-	int cols;
-	int rows;
-	int __x_off;
-	int __y_off;
-	int __unit_width;
-	int __unit_height;
-	int __sx;
-	int __sy;
-	int __sz;
+struct s_sprite {
+	char	*path;
+	t_img	img_attr;
+	int		sx;
+	int		sy;
+	int		cols;
+	int		rows;
+	int		__x_off;
+	int		__y_off;
+	int		__unit_width;
+	int		__unit_height;
+	int		__sx;
+	int		__sy;
+	int		__sz;
 };
 
 typedef struct s_state {
-	// map
-	int map_height;
-	int map_width;
-	char	**map;
+	int							map_height;
+	int							map_width;
+	char						**map;
 
-	// minilibc
-	void 		*__mlx;
-	void		*__win;
-	t_frame 	__frame;
+	void						*__mlx;
+	void						*__win;
+	t_frame						__frame;
 
-	// player
-	enum orientation initial_orientation;
-	int px;
-	int py;
-	int __px;
-	int __py;
-	double __pa; // angle of the player
-	double __fov;
-	double __ray_offset;
-	double __line_count;
-	double __line_thickness;
+	enum e_direction			initial_orientation;
+	int							px;
+	int							py;
+	int							__px;
+	int							__py;
+	double						__pa;
+	double						__fov;
+	double						__ray_offset;
+	double						__line_count;
+	double						__line_thickness;
 
-	// texture
-	struct texture north_texture;
-	struct texture south_texture;
-	struct texture east_texture;
-	struct texture west_texture;
-	struct texture door_texture;
-	struct sprite  sprite;
-	int		f;		// floor color
-	int		c;		// ceiling color
+	struct s_texture			north_texture;
+	struct s_texture			south_texture;
+	struct s_texture			east_texture;
+	struct s_texture			west_texture;
+	struct s_texture			door_texture;
+	struct s_sprite				sprite;
+	int							f;
+	int							c;
 
-	struct ray_intersection *__zbuffer;
+	struct s_ray_intersection	*__zbuffer;
 
-	int		elem;
-	int		flag;
-} t_state;
+	int							elem;
+	int							flag;
+}	t_state;
 
 enum {
 	ON_KEYDOWN = 2,
@@ -178,62 +162,90 @@ enum {
 	MOUSE_SCROLL_DOWN = 5,
 };
 
-extern t_state state;
-
 // parser
 
 //gnl
-char	*get_next_line(int fd);
-char	*ft_get_line(int fd, char *str);
-int		ft_strchr(char *str, int c);
-char	*ft_strjoin(char *str1, char *str2);
-int		ft_strlen(char *str);
-char	*ft_strdup(char *s1);
-//pars
-char	**ft_split(const char *s, char c);
-char	*ft_strrchr(const char *str, int ch);
-char	*skip_sp(char *line);
-char	*set_texture(char *line);
-char	*skip_sp(char *line);
-int		ft_atoi(const char *str);
-int		is_map_char(char c);
-int		is_play(char pl);
-int		if_all_empty(t_state *map);
-int		if_textures_filled(t_state *map);
-int		if_colors_filled(t_state *map);
-int		ft_strncmp(const char *s1, const char *s2, size_t n);
-int		set_colors(char *line);
-int		size_l(char *line, int j);
-int		is_map(char *line);
-void	ft_error(char *msg);
-void	check_filename(char *name);
-void	ft_init(t_state *map);
-void	set_map(char *file, t_state *map);
-void	p_pos(t_state *map, int i, int j);
-void	fill_colors(char *line, t_state *map);
-int		fill_textures(char *line, t_state *map);
-void	all_ele_fil(t_state *map, char *line);
-void	init_map(char *line, t_state *map);
-void	inside_map(t_state *map);
-void	map_elem(char *line, t_state *map);
-void	free_double(char **str);
+char				*get_next_line(int fd);
+char				*ft_get_line(int fd, char *str);
+int					ft_strchr(char *str, int c);
+char				*ft_strjoin(char *str1, char *str2);
+int					ft_strlen(char *str);
+char				*ft_strdup(char *s1);
+char				**ft_split(const char *s, char c);
+char				*ft_strrchr(const char *str, int ch);
+char				*skip_sp(char *line);
+char				*set_texture(char *line);
+char				*skip_sp(char *line);
+int					ft_atoi(const char *str);
+int					is_map_char(char c);
+int					is_play(char pl);
+int					if_all_empty(t_state *map);
+int					if_textures_filled(t_state *map);
+int					if_colors_filled(t_state *map);
+int					ft_strncmp(const char *s1, const char *s2, size_t n);
+int					set_colors(char *line);
+int					size_l(char *line, int j);
+int					is_map(char *line);
+void				ft_error(char *msg);
+void				check_filename(char *name);
+void				ft_init(t_state *map);
+void				set_map(char *file, t_state *map);
+void				p_pos(t_state *map, int i, int j);
+void				fill_colors(char *line, t_state *map);
+int					fill_textures(char *line, t_state *map);
+void				all_ele_fil(t_state *map, char *line);
+void				init_map(char *line, t_state *map);
+void				inside_map(t_state *map);
+void				map_elem(char *line, t_state *map);
+void				free_double(char **str);
 
-// execution
-void init_window();
-int	render();
-void draw_frame();
-void buffered_pixel_put(int x, int y, unsigned int color);
-void draw_map();
-void raycasting();
-void set_player_pos(int x, int y);
-void read_img_from_xpm(char *xpm, t_img *img);
-int	img_pixel_read(t_img *t, int x, int y);
-enum terrain map_terrain(int x, int y);
-double dist_from_origin(double x, double y);
-void rotate(double *x, double *y, double angle);
-void raycasting();
-void draw_sprite();
-void die(char *msg);
-void draw();
+void				init_window(t_state *state);
+int					trigger_render(t_state *state);
+void				draw_frame(t_state *state);
+void				buffered_pixel_put(t_state *state,
+						t_point p, unsigned int color);
+void				draw_map(t_state *state);
+void				raycasting(t_state *state);
+void				set_player_pos(t_state *state, int x, int y);
+void				read_img_from_xpm(t_state *state, char *xpm, t_img *img);
+int					img_pixel_read(const t_img *t, int x, int y);
+enum e_terrain		map_terrain(t_state *state, int x, int y);
+double				dist_from_origin(double x, double y);
+void				rotate(double *x, double *y, double angle);
+void				draw_sprite(t_state *state);
+void				die(char *msg);
+void				start(t_state *state);
+void				init_events(t_state *state);
+void				__draw_map_walls(t_state *state);
+void				__draw_map_player(t_state *state);
+void				__draw_map_sprite(t_state *state);
+void				__draw_map_rays(t_state *state);
+enum e_direction	angle_orientation(double angle, enum e_orientation o);
+void				draw_horizontal_line(t_state *state, int i);
+double				dist_to_wall_size(t_state *state, double dist, double ra);
+void				*ft_memset(void *dest, int v, size_t len);
+void				init_frame(t_state *state, t_frame *f);
+
+int					__is_empty(t_state *state, int x, int y);
+int					__is_space(t_state *state, int x, int y);
+int					__is_wall(t_state *state, int x, int y);
+int					__is_door(t_state *state, int x, int y);
+char				__map(t_state *state, int x, int y);
+int					inflate(int x);
+int					deflate(int x);
+int					color(int t, int r, int g, int b);
+int					green(void);
+int					red(void);
+int					black(void);
+int					white(void);
+int					yellow(void);
+int					error_color(void);
+int					is_error_color(int c);
+void				draw_map_pixel(t_state *state, int x, int y);
+void				draw_ray(t_state *state, t_point p,
+						double angle, int color);
+void				align_point_to_next_boundary(t_int_point *dp,
+						t_int_point p0, double angle, enum e_orientation o);
+int					nearby_door(t_state *state, int x, int y);
 
 #endif

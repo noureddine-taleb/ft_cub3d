@@ -1,6 +1,7 @@
 norm
 memory leaks
 fix a scratch in the screen
+delete debug file
 
 possible improvement:
 increase textures quality

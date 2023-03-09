@@ -1,74 +1,80 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/07 19:33:56 by ntaleb            #+#    #+#             */
+/*   Updated: 2023/03/09 11:47:28 by ntaleb           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
-void draw_map_pixel(int x, int y) {
-	for (int j = mapY(y); j < mapY(y) + mapS; j++) {
-		for (int i = mapX(x); i < mapX(x) + mapS; i++) {
-			if (__IS_WALL(x, y))
-				buffered_pixel_put(i, j, WHITE);
-			else if (__IS_DOOR(x, y))
-				buffered_pixel_put(i, j, YELLOW);
+void	draw_map_pixel(t_state *state, int x, int y)
+{
+	int	i;
+	int	j;
+
+	i = inflate(x);
+	while (i < inflate(x) + MAPS)
+	{
+		j = inflate(y);
+		while (j < inflate(y) + MAPS)
+		{
+			if (__is_wall(state, x, y))
+				buffered_pixel_put(state, (t_point){i, j}, white());
+			else if (__is_door(state, x, y))
+				buffered_pixel_put(state, (t_point){i, j}, yellow());
 			else
-				buffered_pixel_put(i, j, BLACK);
+				buffered_pixel_put(state, (t_point){i, j}, black());
+			j++;
 		}
+		i++;
 	}
 }
 
-void draw_ray(double x, double y, double angle, int color) {
-	double dx = cos(angle);
-	double dy = sin(angle);
-	double x0 = x;
-	double y0 = y;
+void	draw_ray(t_state *state, t_point p, double angle, int color)
+{
+	double	dx;
+	double	dy;
+	double	x0;
+	double	y0;
 
-	while (map_terrain(x, y) == terrain_positive_space 
-	|| (map_terrain(x, y) == terrain_door 
-		&& dist_from_origin(DEFLATE(x)-DEFLATE(x0), DEFLATE(y)-DEFLATE(y0)) <= 1)
-	) {
-		buffered_pixel_put(x, y, color);
-		x += dx;
-		y += dy;
+	dx = cos(angle);
+	dy = sin(angle);
+	x0 = p.x;
+	y0 = p.y;
+	while (map_terrain(state, p.x, p.y) == terrain_positive_space
+		|| (map_terrain(state, p.x, p.y) == terrain_door
+			&& dist_from_origin(deflate(p.x) - deflate(x0),
+				deflate(p.y) - deflate(y0)) <= 1)
+	)
+	{
+		buffered_pixel_put(state, p, color);
+		p.x += dx;
+		p.y += dy;
 	}
 }
 
-enum terrain map_terrain(int x, int y) {
-	x = DEFLATE(x);
-	y = DEFLATE(y);
-
-	if (__IS_EMPTY(x, y))
-		return terrain_negative_space;
-
-	if (__IS_WALL(x, y))
-		return terrain_wall;
-
-	if (__IS_DOOR(x, y))
-		return terrain_door;
-
-	return terrain_positive_space;
+enum e_terrain	map_terrain(t_state *state, int x, int y)
+{
+	x = deflate(x);
+	y = deflate(y);
+	if (__is_empty(state, x, y))
+		return (terrain_negative_space);
+	if (__is_wall(state, x, y))
+		return (terrain_wall);
+	if (__is_door(state, x, y))
+		return (terrain_door);
+	return (terrain_positive_space);
 }
 
-void draw_map() {
-	// draw map
-	for (int j = 0; j < state.map_height; j++) {
-		for (int i = 0; i < state.map_width; i++) {
-			draw_map_pixel(i, j);
-		}
-	}
-
-	// draw player
-	for (int j = state.__py; j < state.__py + pS; j++) {
-		for (int i = state.__px; i < state.__px + pS; i++) {
-			buffered_pixel_put(i, j, YELLOW);
-		}
-	}
-
-	// draw rays
-	for (double ra = state.__pa - state.__fov/2; ra < state.__pa + state.__fov/2; ra += state.__ray_offset) {
-		draw_ray(state.__px + pS/2, state.__py + pS/2, ra, RED);
-	}
-
-	// draw sprite
-	for (int j = state.sprite.__sy; j < state.sprite.__sy + pS; j++) {
-		for (int i = state.sprite.__sx; i < state.sprite.__sx + pS; i++) {
-			buffered_pixel_put(i, j, GREEN);
-		}
-	}
+void	draw_map(t_state *state)
+{
+	__draw_map_walls(state);
+	__draw_map_player(state);
+	__draw_map_rays(state);
+	__draw_map_sprite(state);
 }

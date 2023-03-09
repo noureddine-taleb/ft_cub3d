@@ -1,71 +1,118 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   draw.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/08 16:13:09 by ntaleb            #+#    #+#             */
+/*   Updated: 2023/03/09 15:17:16 by ntaleb           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
-t_state state;
+struct s_texture	*get_texture(t_state *state,
+	const struct s_ray_intersection *intersection)
+{
+	if (map_terrain(state, intersection->p.x, intersection->p.y)
+		== terrain_door)
+		return (&state->door_texture);
+	if (angle_orientation(intersection->angle, vertical) == north
+		&& intersection->orientation == horizontal)
+		return (&state->north_texture);
+	else if (angle_orientation(intersection->angle, horizontal) == east
+		&& intersection->orientation == vertical)
+		return (&state->east_texture);
+	else if (angle_orientation(intersection->angle, vertical) == south
+		&& intersection->orientation == horizontal)
+		return (&state->south_texture);
+	else if (angle_orientation(intersection->angle, horizontal) == west
+		&& intersection->orientation == vertical)
+		return (&state->west_texture);
+	die("unreachable: " __FILE__);
+	return (NULL);
+}
 
-// TODO: delete this
-void print_state() {
-	printf("map_height: %d\n", state.map_height);
-	printf("map_width: %d\n", state.map_width);
-	for (int i=0; i < state.map_height; i++) {
-		printf("|%s|\n", state.map[i]);
+double	get_wall_offset(const struct s_ray_intersection *intersection,
+		const t_img *wall_texture)
+{
+	if (intersection->orientation == vertical)
+		return ((int)intersection->p.y % (MAPS)
+			/ (double)MAPS * wall_texture->width);
+	else
+		return ((int)intersection->p.x % (MAPS)
+			/ (double)MAPS * wall_texture->width);
+}
+
+/**
+ * for higher quality wall textures
+ * dx = ((double)wall_texture->width / MAPS) / state->__line_thickness
+*/
+void	draw_wall(t_state *state, const struct s_ray_intersection *intersection,
+	double height, t_point startw)
+{
+	const t_img				*wall_texture
+		= &get_texture(state, intersection)->img_attr;
+	struct s_point			tp;
+	struct s_point			wp;
+	const struct s_point	tdp
+		= {.x = 0,
+		.y = (double)wall_texture->height / height};
+
+	wp.x = startw.x;
+	tp.x = get_wall_offset(intersection, wall_texture);
+	while (wp.x < startw.x + state->__line_thickness)
+	{
+		tp.y = 0;
+		wp.y = startw.y;
+		while (wp.y < startw.y + height)
+		{
+			buffered_pixel_put(state, wp,
+				img_pixel_read(wall_texture, tp.x, tp.y));
+			wp.y++;
+			tp.y += tdp.y;
+		}
+		wp.x++;
+		tp.x += tdp.x;
 	}
-	printf("px: %d\n", state.px);
-	printf("py: %d\n", state.py);
-	printf("north_texture: %s\n", state.north_texture.path);
-	printf("south_texture: %s\n", state.south_texture.path);
-	printf("east_texture: %s\n", state.east_texture.path);
-	printf("west_texture: %s\n", state.west_texture.path);
-	printf("sprite: %s\n", state.sprite.path);
-	printf("f: %d\n", state.f);
-	printf("c: %d\n", state.c);
-	printf("elem: %d\n", state.elem);
-	printf("flag: %d\n", state.flag);
 }
 
-// TODO: delete this
-void parser_stub() {
-	print_state();
-	state.map_width = 8;
+static void	draw_bg(t_state *state, double height, int startwx, int startwy)
+{
+	struct s_point	wp;
 
-	state.door_texture.path = "./assets/door2.xpm";
-	state.sprite.path = "./assets/mushroom_cloud.xpm";
-	state.sprite.sy = 2;
-	state.sprite.sx = 3;
-	state.sprite.__sz = 5;
-	state.sprite.rows = 4;
-	state.sprite.cols = 5;
+	wp.x = startwx;
+	while (wp.x < startwx + state->__line_thickness)
+	{
+		wp.y = 0;
+		while (wp.y < startwy)
+		{
+			buffered_pixel_put(state, wp, state->c);
+			wp.y++;
+		}
+		wp.y = startwy + height;
+		while (wp.y < HEIGHT)
+		{
+			buffered_pixel_put(state, wp, state->f);
+			wp.y++;
+		}
+		wp.x++;
+	}
 }
 
-void draw() {
-	parser_stub();
+void	draw_horizontal_line(t_state *state, int i)
+{
+	const struct s_ray_intersection	*intersection = &state->__zbuffer[i];
+	double							height;
+	int								startwx;
+	int								startwy;
 
-	state.__fov = M_PI / 2;
-	state.__ray_offset = 0.001;
-	state.__pa = -(M_PI / 2) * state.initial_orientation;
-	state.__line_count = state.__fov / state.__ray_offset;
-	state.__line_thickness = WIDTH / state.__line_count;
-
-	state.__zbuffer = malloc((state.__line_count + 1) * sizeof(*state.__zbuffer));
-
-	state.__px = state.px * mapS + mapS/2;
-	state.__py = state.py * mapS + mapS/2;
-	state.sprite.__sx = state.sprite.sx * mapS + mapS/2;
-	state.sprite.__sy = state.sprite.sy * mapS + mapS/2;
-	state.sprite.__sz = 5;
-
-	init_window();
-	read_img_from_xpm(state.north_texture.path, &state.north_texture.img_attr);
-	read_img_from_xpm(state.south_texture.path, &state.south_texture.img_attr);
-	read_img_from_xpm(state.west_texture.path, &state.west_texture.img_attr);
-	read_img_from_xpm(state.east_texture.path, &state.east_texture.img_attr);
-	read_img_from_xpm(state.sprite.path, &state.sprite.img_attr);
-	read_img_from_xpm(state.door_texture.path, &state.door_texture.img_attr);
-
-	state.sprite.__x_off = 0;
-	state.sprite.__y_off = 0;
-	state.sprite.__unit_width = state.sprite.img_attr.width / state.sprite.cols;
-	state.sprite.__unit_height = state.sprite.img_attr.height / state.sprite.rows;
-
-	render(&state);
-	mlx_loop(state.__mlx);
+	if (i < 0 || i >= state->__line_count)
+		return ;
+	height = dist_to_wall_size(state, intersection->dist, intersection->angle);
+	startwx = i * state->__line_thickness;
+	startwy = (HEIGHT / 2) - height / 2;
+	draw_bg(state, height, startwx, startwy);
+	draw_wall(state, intersection, height, (t_point){startwx, startwy});
 }

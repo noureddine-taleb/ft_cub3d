@@ -1,32 +1,43 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cub3d.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/07 19:34:01 by ntaleb            #+#    #+#             */
+/*   Updated: 2023/03/08 18:55:07 by ntaleb           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
-void die(char *msg) {
-	perror(msg);
-	exit(1);
+void	reset_frame(t_state *state)
+{
+	t_img	*frame_img;
+
+	frame_img = &state->__frame.img_attr;
+	ft_memset(state->__frame.img_attr.addr, 0,
+		frame_img->width * frame_img->height * 4);
 }
 
-void flip_sprite_state();
-void print_sprite();
-
-void buffered_img_put(t_img *img) {
-	for (int i = 0; i < img->width; i++)
-		for (int j = 0; j < img->height; j++) {
-			buffered_pixel_put(i, j, img_pixel_read(img, i, j));
-		}
+void	draw_frame(t_state *state)
+{
+	raycasting(state);
+	draw_sprite(state);
+	draw_map(state);
 }
 
-void buffered_sprite_put(struct sprite *sprite) {
-	for (int i = 0; i < sprite->__unit_width; i++) {
-		for (int j = 0; j < sprite->__unit_height; j++) {
-			buffered_pixel_put(i, j, img_pixel_read(&sprite->img_attr, sprite->__x_off + i, sprite->__y_off + j));
-		}
-	}
+void	flush_frame(t_state *state)
+{
+	mlx_put_image_to_window(state->__mlx, state->__win,
+		state->__frame.img_attr.img, 0, 0);
 }
 
-void draw_frame() {
-	// buffered_sprite_put(&state.sprite);
-	// flip_sprite_state();
-	raycasting();
-	draw_sprite();
-	draw_map();
+int	trigger_render(t_state *state)
+{
+	reset_frame(state);
+	draw_frame(state);
+	flush_frame(state);
+	return (0);
 }
