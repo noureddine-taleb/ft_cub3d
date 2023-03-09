@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
+/*   By: abihe <abihe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 12:47:39 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/08 19:19:07 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/09 16:50:11 by abihe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,9 @@ int main(int argc, char **argv)
 	if(!if_colors_filled(state) || !if_textures_filled(state))
 		ft_error("Elements not filled");
 	inside_map(state);
+	select_line(state);
+	for (int i = 0; i < state->map_height; i++)
+		printf("|%s|\n", state->map[i]);
 	start(state);
 	return (0);
 }

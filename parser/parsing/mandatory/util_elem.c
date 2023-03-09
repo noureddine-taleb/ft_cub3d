@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   util_elem.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
+/*   By: abihe <abihe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 18:14:31 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/08 15:27:41 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/09 16:38:23 by abihe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ enum e_direction char_to_or(char c)
 
 void	p_pos(t_state *map, int i, int j)
 {
-	map->px = i;
-	map->py = j;
+	map->px = j;
+	map->py = i;
 	map->initial_orientation = char_to_or(map->map[i][j]);
 }
 

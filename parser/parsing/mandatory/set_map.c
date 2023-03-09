@@ -6,7 +6,7 @@
 /*   By: abihe <abihe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 19:49:22 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/06 19:24:16 by abihe            ###   ########.fr       */
+/*   Updated: 2023/03/09 16:43:36 by abihe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ void	map_elem(char *line, t_state *map)
 {
 	if (is_map(line) || line[0] == '1')
 	{
+		if (ft_strlen(line) > map->map_width)
+			map->map_width = ft_strlen(line);
 		if (map->flag == -1)
 			map->flag = 0;
 		map->map_height++;
@@ -36,6 +38,31 @@ void	check_pla(int i, int j, t_state *map)
 		p_pos(map, i, j);
 	else
 		ft_error("There is more than one player!");
+}
+
+void	add_spaces(t_state *map, int i)
+{
+	int	j;
+
+	j = ft_strlen(map->map[i]);
+	while (j < map->map_width)
+	{
+		map->map[i] = ft_strjoin(map->map[i], " ");
+		j++;
+	}
+}
+
+void	select_line(t_state *map)
+{
+	int	i;
+
+	i = 0;
+	while (map->map[i])
+	{
+		if ((ft_strlen(map->map[i])) <  map->map_width)
+			add_spaces(map, i);
+		i++;
+	}
 }
 
 void	inside_map(t_state *map)

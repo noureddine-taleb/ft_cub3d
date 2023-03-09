@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
+/*   By: abihe <abihe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 18:08:36 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/09 15:26:13 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/09 16:43:41 by abihe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,6 +198,7 @@ void				init_map(char *line, t_state *map);
 void				inside_map(t_state *map);
 void				map_elem(char *line, t_state *map);
 void				free_double(char **str);
+void				select_line(t_state *map);
 
 void				init_window(t_state *state);
 int					trigger_render(t_state *state);

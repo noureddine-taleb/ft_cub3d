@@ -6,7 +6,7 @@
 /*   By: abihe <abihe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 18:08:29 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/06 19:17:40 by abihe            ###   ########.fr       */
+/*   Updated: 2023/03/09 16:38:00 by abihe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	ft_init(t_state *map)
 	map->elem = 0;
 	map->flag = -1;
 	map->map_height = 0;
+	map->map_width = 0;
 }
 
 void	check_textures(t_state *map, char *line, int fd)

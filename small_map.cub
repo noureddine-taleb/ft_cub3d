@@ -1,16 +1,16 @@
-NO ./assets/0001.xpm
-SO ./assets/south.xpm
-WE ./assets/east.xpm
-EA ./assets/wall_texture.xpm
+NO ./assets/t1.xpm
+SO ./assets/t2.xpm
+WE ./assets/t3.xpm
+EA ./assets/t4.xpm
 
 C 102,178,255
 F 192,192,192
 
-11111111
+111111111111
 10100001
 10200W01
 10100001
-10000001
+1000000111
 10000101
 10000001
 11111111
