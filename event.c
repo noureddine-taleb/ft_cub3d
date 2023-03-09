@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   event.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
+/*   By: abihe <abihe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 11:55:25 by ntaleb            #+#    #+#             */
-/*   Updated: 2023/03/09 11:34:58 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/09 17:52:25 by abihe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,8 @@ int	mouse_event(int mousecode, int x, int y, t_state *state)
 
 void	init_events(t_state *state)
 {
-	mlx_key_hook(state->__win, key_press, state);
+	// mlx_key_hook(state->__win, key_press, state);
+	mlx_hook(state->__win, ON_KEYDOWN, 2L >> 1, key_press, state);
 	mlx_do_key_autorepeaton(state->__mlx);
 	mlx_mouse_hook(state->__win, mouse_event, state);
 	mlx_hook(state->__win, ON_DESTROY, 0, destroy, state);
