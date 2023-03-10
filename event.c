@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 11:55:25 by ntaleb            #+#    #+#             */
-/*   Updated: 2023/03/10 12:05:36 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/10 14:11:22 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ int	key_press(int keycode, t_state *state)
 			sin(state->__pa + M_PI / 2) * 5);
 	else if (keycode == KEY_ESC)
 		destroy(state);
-	trigger_render(state);
 	return (0);
 }
 
@@ -57,7 +56,6 @@ int	mouse_event(int mousecode, int x, int y, t_state *state)
 		state->__pa += 0.1;
 	else if (mousecode == MOUSE_SCROLL_DOWN)
 		state->__pa -= 0.1;
-	trigger_render(state);
 	return (0);
 }
 

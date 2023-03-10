@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 19:34:01 by ntaleb            #+#    #+#             */
-/*   Updated: 2023/03/08 18:55:07 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/10 14:11:13 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,9 @@ void	flush_frame(t_state *state)
 		state->__frame.img_attr.img, 0, 0);
 }
 
+/**
+ * mac speed: 21 fps
+*/
 int	trigger_render(t_state *state)
 {
 	reset_frame(state);

@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 19:34:42 by ntaleb            #+#    #+#             */
-/*   Updated: 2023/03/10 13:51:00 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/10 14:12:40 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,6 @@ void	init_attributes(t_state *state)
 	state->__line_thickness = WIDTH / state->__line_count;
 	state->__zbuffer = malloc((state->__line_count + 1)
 			* sizeof(*state->__zbuffer));
-	state->sprite.__sx = state->sprite.sx * MAPS + MAPS / 2;
-	state->sprite.__sy = state->sprite.sy * MAPS + MAPS / 2;
-	state->sprite.__sz = 5;
 	state->displayed_map.height = 8;
 	state->displayed_map.width = 8;
 	state->__px = 0;
@@ -39,6 +36,11 @@ void	init_sprite(t_state *state)
 {
 	if (state->sprite.path)
 		read_img_from_xpm(state, state->sprite.path, &state->sprite.img_attr);
+	else
+		return ;
+	state->sprite.__sx = state->sprite.sx * MAPS + MAPS / 2;
+	state->sprite.__sy = state->sprite.sy * MAPS + MAPS / 2;
+	state->sprite.__sz = 8;
 	state->sprite.__x_off = 0;
 	state->sprite.__y_off = 0;
 	state->sprite.__unit_width = state->sprite.img_attr.width
@@ -69,6 +71,6 @@ void	start(t_state *state)
 	init_window(state);
 	init_textures(state);
 	init_sprite(state);
-	trigger_render(state);
+	mlx_loop_hook(state->__mlx, trigger_render, state);
 	mlx_loop(state->__mlx);
 }
