@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   event.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abihe <abihe@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 11:55:25 by ntaleb            #+#    #+#             */
-/*   Updated: 2023/03/09 17:52:25 by abihe            ###   ########.fr       */
+/*   Updated: 2023/03/10 12:05:36 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,12 @@ int	destroy(t_state *state)
 	exit(0);
 }
 
+void	adjust_view(t_state *state, int dx, int dy)
+{
+	set_player_pos(state, dx, dy);
+	move_map(state, dx, dy);
+}
+
 int	key_press(int keycode, t_state *state)
 {
 	if (keycode == KEY_LEFT)
@@ -26,17 +32,17 @@ int	key_press(int keycode, t_state *state)
 	else if (keycode == KEY_RIGHT)
 		state->__pa += 0.1;
 	else if (keycode == KEY_UP || keycode == KEY_W)
-		set_player_pos(state, state->__px + cos(state->__pa) * 5,
-			state->__py + sin(state->__pa) * 5);
+		adjust_view(state, cos(state->__pa) * 5,
+			sin(state->__pa) * 5);
 	else if (keycode == KEY_DOWN || keycode == KEY_S)
-		set_player_pos(state, state->__px - cos(state->__pa) * 5,
-			state->__py - sin(state->__pa) * 5);
+		adjust_view(state, -cos(state->__pa) * 5,
+			-sin(state->__pa) * 5);
 	else if (keycode == KEY_A)
-		set_player_pos(state, state->__px + cos(state->__pa - M_PI / 2) * 5,
-			state->__py + sin(state->__pa - M_PI / 2) * 5);
+		adjust_view(state, cos(state->__pa - M_PI / 2) * 5,
+			sin(state->__pa - M_PI / 2) * 5);
 	else if (keycode == KEY_D)
-		set_player_pos(state, state->__px + cos(state->__pa + M_PI / 2) * 5,
-			state->__py + sin(state->__pa + M_PI / 2) * 5);
+		adjust_view(state, cos(state->__pa + M_PI / 2) * 5,
+			sin(state->__pa + M_PI / 2) * 5);
 	else if (keycode == KEY_ESC)
 		destroy(state);
 	trigger_render(state);
@@ -46,7 +52,7 @@ int	key_press(int keycode, t_state *state)
 int	mouse_event(int mousecode, int x, int y, t_state *state)
 {
 	if (mousecode == MOUSE_LEFT)
-		set_player_pos(state, x, y);
+		set_player_pos(state, x - state->__px, y - state->__py);
 	else if (mousecode == MOUSE_SCROLL_UP)
 		state->__pa += 0.1;
 	else if (mousecode == MOUSE_SCROLL_DOWN)
@@ -57,7 +63,6 @@ int	mouse_event(int mousecode, int x, int y, t_state *state)
 
 void	init_events(t_state *state)
 {
-	// mlx_key_hook(state->__win, key_press, state);
 	mlx_hook(state->__win, ON_KEYDOWN, 2L >> 1, key_press, state);
 	mlx_do_key_autorepeaton(state->__mlx);
 	mlx_mouse_hook(state->__win, mouse_event, state);

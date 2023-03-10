@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 14:09:32 by ntaleb            #+#    #+#             */
-/*   Updated: 2023/03/09 11:49:57 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/10 14:50:01 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,18 @@
 
 void	__draw_map_walls(t_state *state)
 {
-	int	i;
-	int	j;
+	int			i;
+	int			j;
+	const int	startx = state->displayed_map.off_x;
+	const int	starty = state->displayed_map.off_y;
 
-	i = 0;
-	while (i < state->map_width)
+	i = startx;
+	while (i < inflate(state->map_width)
+		&& i < startx + inflate(state->displayed_map.width))
 	{
-		j = 0;
-		while (j < state->map_height)
+		j = starty;
+		while (j < inflate(state->map_height)
+			&& j < starty + inflate(state->displayed_map.height))
 		{
 			draw_map_pixel(state, i, j);
 			j++;
@@ -32,14 +36,16 @@ void	__draw_map_walls(t_state *state)
 
 void	__draw_map_player(t_state *state)
 {
-	int	i;
-	int	j;
+	int			i;
+	int			j;
+	const int	startwx = state->__px - state->displayed_map.off_x;
+	const int	startwy = state->__py - state->displayed_map.off_y;
 
-	i = state->__px;
-	while (i < state->__px + PS)
+	i = startwx;
+	while (i < startwx + PS)
 	{
-		j = state->__py;
-		while (j < state->__py + PS)
+		j = startwy;
+		while (j < startwy + PS)
 		{
 			buffered_pixel_put(state, (t_point){i, j}, yellow());
 			j++;
@@ -50,14 +56,16 @@ void	__draw_map_player(t_state *state)
 
 void	__draw_map_sprite(t_state *state)
 {
-	int	i;
-	int	j;
+	int			i;
+	int			j;
+	const int	startwx = state->sprite.__sx - state->displayed_map.off_x;
+	const int	startwy = state->sprite.__sx - state->displayed_map.off_y;
 
-	i = state->sprite.__sx;
-	while (i < state->sprite.__sx + PS)
+	i = startwx;
+	while (i < startwx + PS)
 	{
-		j = state->sprite.__sy;
-		while (j < state->sprite.__sy + PS)
+		j = startwy;
+		while (j < startwy + PS)
 		{
 			buffered_pixel_put(state, (t_point){i, j}, green());
 			j++;

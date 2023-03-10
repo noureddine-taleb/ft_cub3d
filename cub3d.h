@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abihe <abihe@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 18:08:36 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/09 16:43:41 by abihe            ###   ########.fr       */
+/*   Updated: 2023/03/10 12:52:55 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,10 +95,19 @@ struct s_sprite {
 	int		__sz;
 };
 
+typedef struct s_map {
+	int		width;
+	int		height;
+
+	int		off_x;
+	int		off_y;
+}	t_map;
+
 typedef struct s_state {
 	int							map_height;
 	int							map_width;
 	char						**map;
+	t_map						displayed_map;
 
 	void						*__mlx;
 	void						*__win;
@@ -207,7 +216,7 @@ void				buffered_pixel_put(t_state *state,
 						t_point p, unsigned int color);
 void				draw_map(t_state *state);
 void				raycasting(t_state *state);
-void				set_player_pos(t_state *state, int x, int y);
+void				set_player_pos(t_state *state, int dx, int dy);
 void				read_img_from_xpm(t_state *state, char *xpm, t_img *img);
 int					img_pixel_read(const t_img *t, int x, int y);
 enum e_terrain		map_terrain(t_state *state, int x, int y);
@@ -248,5 +257,9 @@ void				draw_ray(t_state *state, t_point p,
 void				align_point_to_next_boundary(t_int_point *dp,
 						t_int_point p0, double angle, enum e_orientation o);
 int					nearby_door(t_state *state, int x, int y);
+void				move_map(t_state *state, int dx, int dy);
+void				adjust_view(t_state *state, int dx, int dy);
+int					withing_displayed_map(t_state *state, int x, int y);
+int					is_nearby_door(t_state *state, t_point p0, t_point tp);
 
 #endif

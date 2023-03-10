@@ -29,7 +29,6 @@ void	print_state(t_state *state)
 // TODO: delete this
 void	parser_stub(t_state *state)
 {
-	state->map_width = 8;
 	state->door_texture.path = "./assets/door2.xpm";
 	state->sprite.path = "./assets/mushroom_cloud.xpm";
 	state->sprite.sy = 2;

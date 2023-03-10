@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 19:34:42 by ntaleb            #+#    #+#             */
-/*   Updated: 2023/03/09 11:54:20 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/10 13:29:12 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,18 @@ void	init_attributes(t_state *state)
 	state->__line_thickness = WIDTH / state->__line_count;
 	state->__zbuffer = malloc((state->__line_count + 1)
 			* sizeof(*state->__zbuffer));
-	state->__px = state->px * MAPS + MAPS / 2;
-	state->__py = state->py * MAPS + MAPS / 2;
 	state->sprite.__sx = state->sprite.sx * MAPS + MAPS / 2;
 	state->sprite.__sy = state->sprite.sy * MAPS + MAPS / 2;
 	state->sprite.__sz = 5;
+	state->displayed_map.height = 8;
+	state->displayed_map.width = 8;
+	state->__px = 0;
+	state->__py = 0;
+	state->displayed_map.off_x = 0;
+	state->displayed_map.off_y = 0;
+	state->__px = state->px * MAPS + MAPS / 2;
+	state->__py = state->py * MAPS + MAPS / 2;
+	move_map(state, state->__px, state->__py);
 }
 
 void	init_sprite(t_state *state)
