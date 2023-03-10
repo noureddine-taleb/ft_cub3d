@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_map.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abihe <abihe@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 19:49:22 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/09 16:43:36 by abihe            ###   ########.fr       */
+/*   Updated: 2023/03/10 11:15:46 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	map_elem(char *line, t_state *map)
 
 void	check_pla(int i, int j, t_state *map)
 {
-	if (map->initial_orientation == '\0')
+	if (map->initial_orientation == -1)
 		p_pos(map, i, j);
 	else
 		ft_error("There is more than one player!");
@@ -90,6 +90,6 @@ void	inside_map(t_state *map)
 		}
 		i++;
 	}
-	if (map->initial_orientation == '\0')
+	if (map->initial_orientation == -1)
 		ft_error("No player found!");
 }

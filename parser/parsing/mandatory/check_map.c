@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abihe <abihe@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 18:08:29 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/09 16:38:00 by abihe            ###   ########.fr       */
+/*   Updated: 2023/03/10 11:15:29 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	ft_init(t_state *map)
 	map->west_texture.path= NULL;
 	map->east_texture.path= NULL;
 	map->map = NULL;
-	map->initial_orientation = 0;
+	map->initial_orientation = -1;
 	map->px = 0;
 	map->py = 0;
 	map->f = -1;
