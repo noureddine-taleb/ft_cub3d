@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 19:34:42 by ntaleb            #+#    #+#             */
-/*   Updated: 2023/03/10 13:29:12 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/10 13:51:00 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ void	init_attributes(t_state *state)
 
 void	init_sprite(t_state *state)
 {
-	read_img_from_xpm(state, state->sprite.path, &state->sprite.img_attr);
+	if (state->sprite.path)
+		read_img_from_xpm(state, state->sprite.path, &state->sprite.img_attr);
 	state->sprite.__x_off = 0;
 	state->sprite.__y_off = 0;
 	state->sprite.__unit_width = state->sprite.img_attr.width
@@ -56,8 +57,9 @@ void	init_textures(t_state *state)
 		&state->west_texture.img_attr);
 	read_img_from_xpm(state, state->east_texture.path,
 		&state->east_texture.img_attr);
-	read_img_from_xpm(state, state->door_texture.path,
-		&state->door_texture.img_attr);
+	if (state->door_texture.path)
+		read_img_from_xpm(state, state->door_texture.path,
+			&state->door_texture.img_attr);
 }
 
 void	start(t_state *state)

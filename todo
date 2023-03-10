@@ -1,14 +1,17 @@
 norm
 memory leaks
-fix a scratch in the screen
 delete debug file
 
 possible improvement:
 increase textures quality
+fix a scratch in the screen
 fix glitches
 make the map transparent
 
 parser
+check if door texture exists if there is a door in the map
+check if sprite texture exists if there is a sprite in the map
+there should be only one sprite
 width/height sprite doors
 fill map width
 append spaces to to make all line with the same width
