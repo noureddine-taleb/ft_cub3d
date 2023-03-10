@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 19:35:00 by ntaleb            #+#    #+#             */
-/*   Updated: 2023/03/10 13:35:57 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/10 13:42:44 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ void	draw_sprite(t_state *state)
 	double					dist;
 	double					pixels_per_fov;
 
+	if (!state->sprite.path)
+		return ;
 	sp.x = sprite->__sx - state->__px;
 	sp.y = sprite->__sy - state->__py;
 	rotate(&sp.x, &sp.y, -state->__pa);
