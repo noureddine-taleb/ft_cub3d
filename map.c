@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 19:33:56 by ntaleb            #+#    #+#             */
-/*   Updated: 2023/03/10 13:26:26 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/10 13:36:06 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ void	draw_map_pixel(t_state *state, int mx, int my)
 	const int			wy = my - state->displayed_map.off_y;
 
 	if (__is_wall(state, deflate(mx), deflate(my)))
-		buffered_pixel_put(state, (t_point){wx, wy}, white());
+		buffered_pixel_put(state, (t_point){.x = wx, .y = wy}, white());
 	else if (__is_door(state, deflate(mx), deflate(my)))
-		buffered_pixel_put(state, (t_point){wx, wy}, yellow());
+		buffered_pixel_put(state, (t_point){.x = wx, .y = wy}, yellow());
 	else
-		buffered_pixel_put(state, (t_point){wx, wy}, black());
+		buffered_pixel_put(state, (t_point){.x = wx, .y = wy}, black());
 }
 
 void	draw_ray(t_state *state, t_point p, double angle, int color)

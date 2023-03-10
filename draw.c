@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:13:09 by ntaleb            #+#    #+#             */
-/*   Updated: 2023/03/09 15:17:16 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/10 13:36:11 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,5 +114,6 @@ void	draw_horizontal_line(t_state *state, int i)
 	startwx = i * state->__line_thickness;
 	startwy = (HEIGHT / 2) - height / 2;
 	draw_bg(state, height, startwx, startwy);
-	draw_wall(state, intersection, height, (t_point){startwx, startwy});
+	draw_wall(state, intersection, height,
+		(t_point){.x = startwx, .y = startwy});
 }

@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 19:35:00 by ntaleb            #+#    #+#             */
-/*   Updated: 2023/03/09 11:52:04 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/10 13:35:57 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,14 +73,13 @@ void	draw_sprite(t_state *state)
 
 	sp.x = sprite->__sx - state->__px;
 	sp.y = sprite->__sy - state->__py;
-	sp.z = sprite->__sz;
 	rotate(&sp.x, &sp.y, -state->__pa);
 	dist = dist_from_origin(sp.x, sp.y);
 	pixels_per_fov = WIDTH / (state->__fov * dist);
 	if (sp.x < 0)
 		return ;
 	sp.x = sp.y * pixels_per_fov + (WIDTH / 2);
-	sp.y = sp.z * pixels_per_fov + (HEIGHT / 2);
+	sp.y = sprite->__sz * pixels_per_fov + (HEIGHT / 2);
 	if (should_display_sprite(state, sp.x, sp.y, dist))
 		__draw_sprite(state, sp.x, sp.y, dist);
 }

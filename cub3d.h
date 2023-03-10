@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 18:08:36 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/10 12:52:55 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/10 13:36:43 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ enum e_terrain {
 };
 
 enum e_direction {
+	nodir = -1,
 	east = 0,
 	north = 1,
 	west = 2,
@@ -53,7 +54,6 @@ typedef struct s_int_point {
 typedef struct s_point {
 	double	x;
 	double	y;
-	double	z;
 }	t_point;
 
 struct s_ray_intersection {
@@ -261,5 +261,8 @@ void				move_map(t_state *state, int dx, int dy);
 void				adjust_view(t_state *state, int dx, int dy);
 int					withing_displayed_map(t_state *state, int x, int y);
 int					is_nearby_door(t_state *state, t_point p0, t_point tp);
+
+// TODO: REMOVE THIS
+void				parser_stub(t_state *state);
 
 #endif
