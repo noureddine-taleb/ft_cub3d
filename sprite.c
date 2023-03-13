@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 19:35:00 by ntaleb            #+#    #+#             */
-/*   Updated: 2023/03/13 19:11:32 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/13 21:33:00 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,9 @@ void	__draw_sprite(t_state *state, const double sx,
 		.y = sprite->__unit_height / height},
 		.img = &sprite->img_attr,
 	});
-	flip_sprite_state(state);
 }
 
-void	draw_sprite(t_state *state)
+void	draw_sprite(t_state *state, int sprite_i)
 {
 	const struct s_sprite	*sprite = &state->sprite;
 	struct s_point			sp;
@@ -69,8 +68,8 @@ void	draw_sprite(t_state *state)
 
 	if (!state->sprite.path)
 		return ;
-	sp.x = sprite->__sx - state->__px;
-	sp.y = sprite->__sy - state->__py;
+	sp.x = sprite->sprites[sprite_i].x - state->__px;
+	sp.y = sprite->sprites[sprite_i].y - state->__py;
 	rotate(&sp.x, &sp.y, -state->__pa);
 	dist = dist_from_origin(sp.x, sp.y);
 	pixels_per_fov = WIDTH / (state->__fov * dist);

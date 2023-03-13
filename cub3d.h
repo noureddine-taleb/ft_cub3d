@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abihe <abihe@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 18:08:36 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/13 20:07:54 by abihe            ###   ########.fr       */
+/*   Updated: 2023/03/13 22:01:43 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ enum e_orientation {
 };
 
 typedef struct s_int_point {
-	int x;
-	int y;
-} t_int_point;
+	int	x;
+	int	y;
+}	t_int_point;
 
 typedef struct s_point {
 	double	x;
@@ -80,20 +80,18 @@ struct s_texture {
 };
 
 struct s_sprite {
-	char	*path;
-	t_img	img_attr;
-	int		sx;
-	int		nb_sp;
-	int		sy;
-	int		cols;
-	int		rows;
-	int		__x_off;
-	int		__y_off;
-	int		__unit_width;
-	int		__unit_height;
-	int		__sx;
-	int		__sy;
-	int		__sz;
+	char		*path;
+	t_img		img_attr;
+	int			nb_sp;
+	int			cols;
+	int			rows;
+	int			__x_off;
+	int			__y_off;
+	int			__unit_width;
+	int			__unit_height;
+	int			__sz;
+	int			count;
+	t_int_point	*sprites;
 };
 
 typedef struct s_map {
@@ -235,13 +233,22 @@ int					img_pixel_read(const t_img *t, int x, int y);
 enum e_terrain		map_terrain(t_state *state, int x, int y);
 double				dist_from_origin(double x, double y);
 void				rotate(double *x, double *y, double angle);
-void				draw_sprite(t_state *state);
+void				draw_sprite(t_state *state, int sprite_i);
+void				flip_sprite_state(t_state *state);
 void				die(char *msg);
 void				start(t_state *state);
 void				init_events(t_state *state);
 void				__draw_map_walls(t_state *state);
 void				__draw_map_player(t_state *state);
-void				__draw_map_sprite(t_state *state);
+void				for_each_sprite(t_state *state,
+						void (*handler)(t_state *state, int i));
+void				for_each_map_pixel(t_state *state,
+						void (*handler)(t_state *state, int x, int y));
+void				count_sprites(t_state *state, int x, int y);
+void				fill_sprite(t_state *state, int x, int y);
+void				__fill_sprites(t_state *state);
+
+void				__draw_map_sprite(t_state *state, int i);
 void				__draw_map_rays(t_state *state);
 enum e_direction	angle_orientation(double angle, enum e_orientation o);
 void				draw_horizontal_line(t_state *state, int i);
@@ -275,8 +282,5 @@ void				adjust_view(t_state *state, int dx, int dy);
 int					withing_displayed_map(t_state *state, int x, int y);
 int					is_nearby_door(t_state *state, t_point p0, t_point tp);
 void				put_img_fragment(t_state *state, const t_win_fragment frag);
-
-// TODO: REMOVE THIS
-void				parser_stub(t_state *state);
 
 #endif

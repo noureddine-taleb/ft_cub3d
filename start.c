@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 19:34:42 by ntaleb            #+#    #+#             */
-/*   Updated: 2023/03/13 14:07:31 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/13 22:02:05 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,13 @@ void	init_attributes(t_state *state)
 
 void	init_sprite(t_state *state)
 {
+	state->sprite.sprites = NULL;
+	state->sprite.count = 0;
 	if (state->sprite.path)
 		read_img_from_xpm(state, state->sprite.path, &state->sprite.img_attr);
 	else
 		return ;
-	state->sprite.__sx = state->sprite.sx * MAPS + MAPS / 2;
-	state->sprite.__sy = state->sprite.sy * MAPS + MAPS / 2;
+	__fill_sprites(state);
 	state->sprite.__sz = 8;
 	state->sprite.__x_off = 0;
 	state->sprite.__y_off = 0;
@@ -67,7 +68,6 @@ void	init_textures(t_state *state)
 
 void	start(t_state *state)
 {
-	parser_stub(state);
 	init_attributes(state);
 	init_window(state);
 	init_textures(state);

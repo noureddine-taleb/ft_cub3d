@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 19:34:01 by ntaleb            #+#    #+#             */
-/*   Updated: 2023/03/10 14:11:13 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/13 21:32:53 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	reset_frame(t_state *state)
 void	draw_frame(t_state *state)
 {
 	raycasting(state);
-	draw_sprite(state);
+	for_each_sprite(state, draw_sprite);
 	draw_map(state);
 }
 

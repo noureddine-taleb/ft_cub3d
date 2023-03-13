@@ -1,5 +1,5 @@
 TARGET := cub3D
-SRCS := start.c cub3d.c window.c raycaster.c draw.c map.c map2.c map3.c map4.c player.c sprite.c math.c event.c helpers.c helpers2.c helpers3.c image.c debug.c \
+SRCS := start.c cub3d.c window.c raycaster.c draw.c map.c map2.c map3.c map4.c player.c sprite.c sprite2.c math.c event.c helpers.c helpers2.c helpers3.c image.c \
 			parser/parsing/mandatory/check_map.c \
 			parser/parsing/gnl/get_next_line.c \
 			parser/parsing/gnl/get_next_line_utils.c \

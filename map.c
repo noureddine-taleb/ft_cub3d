@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 19:33:56 by ntaleb            #+#    #+#             */
-/*   Updated: 2023/03/10 13:36:06 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/13 21:33:12 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,8 @@ void	draw_map(t_state *state)
 	__draw_map_walls(state);
 	__draw_map_player(state);
 	__draw_map_rays(state);
-	__draw_map_sprite(state);
+	for_each_sprite(state, __draw_map_sprite);
+	flip_sprite_state(state);
 }
 
 void	move_map(t_state *state, int dx, int dy)

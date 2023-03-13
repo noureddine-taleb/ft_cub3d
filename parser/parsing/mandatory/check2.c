@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abihe <abihe@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 11:20:00 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/13 20:05:22 by abihe            ###   ########.fr       */
+/*   Updated: 2023/03/13 21:37:27 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,20 +21,10 @@ int	is_door(t_state *map)
 
 void	if_sprite(int i, int j, t_state *map)
 {
-	if (map->map[i][j] == '3')
-	{
-		if (map->sprite.nb_sp == 0)
-		{
-			map->sprite.sx = j;
-			map->sprite.sy = i;
-			map->map[i][j] = '0';
-			map->sprite.rows = 4;
-			map->sprite.cols = 5;
-			map->sprite.nb_sp = 1;
-		}
-		else
-			ft_error("There's more then one animated sprite");
-	}
+	(void)i;
+	(void)j;
+	map->sprite.rows = 4;
+	map->sprite.cols = 5;
 }
 
 int	fill_do_sp(char *line, t_state *map)
