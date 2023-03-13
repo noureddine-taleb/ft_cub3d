@@ -33,7 +33,6 @@ void	parser_stub(t_state *state)
 	state->sprite.path = "./assets/mushroom_cloud.xpm";
 	state->sprite.sy = 2;
 	state->sprite.sx = 3;
-	state->sprite.__sz = 5;
 	state->sprite.rows = 4;
 	state->sprite.cols = 5;
 	print_state(state);
