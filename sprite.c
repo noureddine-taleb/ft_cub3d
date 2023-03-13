@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 19:35:00 by ntaleb            #+#    #+#             */
-/*   Updated: 2023/03/10 13:42:44 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/13 19:11:32 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,21 +46,17 @@ void	__draw_sprite(t_state *state, const double sx,
 
 	sprite = &state->sprite;
 	sp.x = sprite->__x_off;
+	sp.y = sprite->__y_off;
 	wp.x = sx - width / 2;
-	while (wp.x < (sx - width / 2) + width)
-	{
-		sp.y = sprite->__y_off;
-		wp.y = sy - height / 2;
-		while (wp.y < (sy - height / 2) + height)
-		{
-			buffered_pixel_put(state, wp,
-				img_pixel_read(&sprite->img_attr, sp.x, sp.y));
-			wp.y++;
-			sp.y += sprite->__unit_height / height;
-		}
-		wp.x++;
-		sp.x += sprite->__unit_width / width;
-	}
+	wp.y = sy - height / 2;
+	put_img_fragment(state, (t_win_fragment){
+		.startwp = wp,
+		.starttp = sp,
+		.w_width_height = {.x = width, .y = height},
+		.tdp = {.x = sprite->__unit_width / width,
+		.y = sprite->__unit_height / height},
+		.img = &sprite->img_attr,
+	});
 	flip_sprite_state(state);
 }
 

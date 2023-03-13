@@ -1,12 +1,13 @@
-norm
-memory leaks
-delete debug file
+remove debug file
+check todo notes
+
 
 possible improvement:
 increase textures quality
 fix a scratch in the screen
 fix glitches
 make the map transparent
+fix the delays that happens when you get too close to a wall
 
 parser
 check if door texture exists if there is a door in the map

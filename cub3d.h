@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 18:08:36 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/10 13:36:43 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/13 18:55:21 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,14 @@ typedef struct s_state {
 	int							flag;
 }	t_state;
 
+typedef struct s_win_fragment {
+	struct s_point		startwp;
+	struct s_point		starttp;
+	struct s_point		w_width_height;
+	struct s_point		tdp;
+	const t_img			*img;
+}	t_win_fragment;
+
 enum {
 	ON_KEYDOWN = 2,
 	ON_KEYUP = 3,
@@ -216,7 +224,7 @@ void				buffered_pixel_put(t_state *state,
 						t_point p, unsigned int color);
 void				draw_map(t_state *state);
 void				raycasting(t_state *state);
-void				set_player_pos(t_state *state, int dx, int dy);
+void				set_player_pos(t_state *state, int *dx, int *dy);
 void				read_img_from_xpm(t_state *state, char *xpm, t_img *img);
 int					img_pixel_read(const t_img *t, int x, int y);
 enum e_terrain		map_terrain(t_state *state, int x, int y);
@@ -261,6 +269,7 @@ void				move_map(t_state *state, int dx, int dy);
 void				adjust_view(t_state *state, int dx, int dy);
 int					withing_displayed_map(t_state *state, int x, int y);
 int					is_nearby_door(t_state *state, t_point p0, t_point tp);
+void				put_img_fragment(t_state *state, const t_win_fragment frag);
 
 // TODO: REMOVE THIS
 void				parser_stub(t_state *state);

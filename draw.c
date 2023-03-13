@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:13:09 by ntaleb            #+#    #+#             */
-/*   Updated: 2023/03/10 13:36:11 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/13 18:56:22 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ double	get_wall_offset(const struct s_ray_intersection *intersection,
  * dx = ((double)wall_texture->width / MAPS) / state->__line_thickness
 */
 void	draw_wall(t_state *state, const struct s_ray_intersection *intersection,
-	double height, t_point startw)
+	const double height, const t_point startw)
 {
 	const t_img				*wall_texture
 		= &get_texture(state, intersection)->img_attr;
@@ -62,20 +62,14 @@ void	draw_wall(t_state *state, const struct s_ray_intersection *intersection,
 
 	wp.x = startw.x;
 	tp.x = get_wall_offset(intersection, wall_texture);
-	while (wp.x < startw.x + state->__line_thickness)
-	{
-		tp.y = 0;
-		wp.y = startw.y;
-		while (wp.y < startw.y + height)
-		{
-			buffered_pixel_put(state, wp,
-				img_pixel_read(wall_texture, tp.x, tp.y));
-			wp.y++;
-			tp.y += tdp.y;
-		}
-		wp.x++;
-		tp.x += tdp.x;
-	}
+	tp.y = 0;
+	put_img_fragment(state, (t_win_fragment){
+		.startwp = startw,
+		.starttp = tp,
+		.w_width_height = {.x = state->__line_thickness, .y = height},
+		.tdp = tdp,
+		.img = wall_texture
+	});
 }
 
 static void	draw_bg(t_state *state, double height, int startwx, int startwy)

@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 11:59:10 by ntaleb            #+#    #+#             */
-/*   Updated: 2023/03/09 11:43:12 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/13 18:54:34 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,31 @@ void	buffered_pixel_put(t_state *state, t_point p, unsigned int color)
 		return ;
 	dst = frame_img->addr + (((int)p.y * frame_img->width + (int)p.x) * 4);
 	*(unsigned int *)dst = color;
+}
+
+void	put_img_fragment(t_state *state, const t_win_fragment frag)
+{
+	struct s_point				wp;
+	struct s_point				tp;
+
+	wp = frag.startwp;
+	tp = frag.starttp;
+	while (wp.x < frag.startwp.x + frag.w_width_height.x)
+	{
+		if (wp.x >= 0 && wp.x < state->__frame.img_attr.width)
+		{
+			tp.y = frag.starttp.y;
+			wp.y = frag.startwp.y;
+			while (wp.y < frag.startwp.y + frag.w_width_height.y)
+			{
+				if (wp.y >= 0 && wp.y < state->__frame.img_attr.height)
+					buffered_pixel_put(state, (t_point){.x = wp.x, .y = wp.y},
+						img_pixel_read(frag.img, tp.x, tp.y));
+				wp.y++;
+				tp.y += frag.tdp.y;
+			}
+		}
+		wp.x++;
+		tp.x += frag.tdp.x;
+	}
 }
