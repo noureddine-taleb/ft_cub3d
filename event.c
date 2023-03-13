@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 11:55:25 by ntaleb            #+#    #+#             */
-/*   Updated: 2023/03/10 14:11:22 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/13 14:01:20 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	destroy(t_state *state)
 
 void	adjust_view(t_state *state, int dx, int dy)
 {
-	set_player_pos(state, dx, dy);
+	set_player_pos(state, &dx, &dy);
 	move_map(state, dx, dy);
 }
 
@@ -50,9 +50,9 @@ int	key_press(int keycode, t_state *state)
 
 int	mouse_event(int mousecode, int x, int y, t_state *state)
 {
-	if (mousecode == MOUSE_LEFT)
-		set_player_pos(state, x - state->__px, y - state->__py);
-	else if (mousecode == MOUSE_SCROLL_UP)
+	(void)x;
+	(void)y;
+	if (mousecode == MOUSE_SCROLL_UP)
 		state->__pa += 0.1;
 	else if (mousecode == MOUSE_SCROLL_DOWN)
 		state->__pa -= 0.1;

@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 19:34:42 by ntaleb            #+#    #+#             */
-/*   Updated: 2023/03/10 14:12:40 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/13 14:07:31 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ void	init_attributes(t_state *state)
 	state->displayed_map.off_y = 0;
 	state->__px = state->px * MAPS + MAPS / 2;
 	state->__py = state->py * MAPS + MAPS / 2;
-	move_map(state, state->__px, state->__py);
+	move_map(state, state->__px - inflate(state->displayed_map.width / 2),
+		state->__py - inflate(state->displayed_map.height / 2));
 }
 
 void	init_sprite(t_state *state)

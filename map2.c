@@ -6,7 +6,7 @@
 /*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 14:09:32 by ntaleb            #+#    #+#             */
-/*   Updated: 2023/03/10 14:50:01 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/13 19:41:58 by ntaleb           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	__draw_map_sprite(t_state *state)
 	int			i;
 	int			j;
 	const int	startwx = state->sprite.__sx - state->displayed_map.off_x;
-	const int	startwy = state->sprite.__sx - state->displayed_map.off_y;
+	const int	startwy = state->sprite.__sy - state->displayed_map.off_y;
 
 	i = startwx;
 	while (i < startwx + PS)
