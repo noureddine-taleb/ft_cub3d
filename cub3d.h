@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
+/*   By: abihe <abihe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 18:08:36 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/10 13:36:43 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/13 19:31:07 by abihe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ struct s_sprite {
 	char	*path;
 	t_img	img_attr;
 	int		sx;
+	int		nb_sp;
 	int		sy;
 	int		cols;
 	int		rows;
@@ -208,6 +209,10 @@ void				inside_map(t_state *map);
 void				map_elem(char *line, t_state *map);
 void				free_double(char **str);
 void				select_line(t_state *map);
+void				map_char(int i, int j, t_state *map);
+int					fill_do_sp(char *line, t_state *map);
+int					fill_text2(char *line, t_state *map);
+void				if_sprite(int i, int j, t_state *map);
 
 void				init_window(t_state *state);
 int					trigger_render(t_state *state);

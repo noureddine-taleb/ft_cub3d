@@ -3,24 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   check_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
+/*   By: abihe <abihe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 18:08:29 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/10 13:37:07 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/13 16:45:54 by abihe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include"../../../cub3d.h"
 
-
 void	ft_init(t_state *map)
 {
 	map->north_texture.path = NULL;
 	map->south_texture.path = NULL;
-	map->west_texture.path= NULL;
-	map->east_texture.path= NULL;
+	map->west_texture.path = NULL;
+	map->east_texture.path = NULL;
+	map->door_texture.path = NULL;
+	map->sprite.path = NULL;
 	map->map = NULL;
 	map->initial_orientation = nodir;
+	map->sprite.nb_sp = 0;
 	map->px = 0;
 	map->py = 0;
 	map->f = -1;

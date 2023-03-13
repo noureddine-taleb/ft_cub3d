@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_map.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
+/*   By: abihe <abihe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 19:49:22 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/10 13:37:18 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/13 17:31:55 by abihe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	select_line(t_state *map)
 	i = 0;
 	while (map->map[i])
 	{
-		if ((ft_strlen(map->map[i])) <  map->map_width)
+		if ((ft_strlen(map->map[i])) < map->map_width)
 			add_spaces(map, i);
 		i++;
 	}
@@ -76,16 +76,12 @@ void	inside_map(t_state *map)
 		j = 0;
 		while (map->map[i][j])
 		{
-			if ((map->map[i][j] == '0' || is_play(map->map[i][j]))
-				&& (i == 0 || j == 0 || map->map[i][j + 1] == '\0' || map->map[i + 1] == NULL
-				|| map->map[i][j + 1] == ' ' || map->map[i][j - 1] == ' '
-				|| size_l(map->map[i - 1], j) || size_l(map->map[i + 1], j)
-				|| map->map[i + 1][j] == ' ' || map->map[i - 1][j] == ' '))
-				ft_error("Map not set properly");
+			map_char(i, j, map);
 			if (!is_map_char(map->map[i][j]))
 				ft_error("There is a foreign charachter!");
 			if (is_play(map->map[i][j]))
 				check_pla(i, j, map);
+			if_sprite(i, j, map);
 			j++;
 		}
 		i++;

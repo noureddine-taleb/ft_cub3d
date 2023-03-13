@@ -6,7 +6,7 @@
 /*   By: abihe <abihe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 12:47:39 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/09 16:50:11 by abihe            ###   ########.fr       */
+/*   Updated: 2023/03/13 16:12:27 by abihe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@ int main(int argc, char **argv)
 		ft_error("Elements not filled");
 	inside_map(state);
 	select_line(state);
-	for (int i = 0; i < state->map_height; i++)
-		printf("|%s|\n", state->map[i]);
 	start(state);
 	return (0);
 }

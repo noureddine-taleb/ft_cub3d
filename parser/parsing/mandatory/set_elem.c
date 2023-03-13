@@ -6,7 +6,7 @@
 /*   By: abihe <abihe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 18:38:04 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/06 19:21:32 by abihe            ###   ########.fr       */
+/*   Updated: 2023/03/13 19:54:40 by abihe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*set_texture(char *line)
 	if (!sp || !sp[1] || sp[2])
 		ft_error("something wrong with texture");
 	result = ft_strdup(sp[1]);
-	if (access(result, R_OK))
+	if (open(result, O_RDONLY) == -1)
 		ft_error("404! in texture file!");
 	free_double(sp);
 	return (result);
@@ -45,23 +45,17 @@ int	fill_textures(char *line, t_state *map)
 		map->elem++;
 		return (1);
 	}
-	if (ft_strncmp("WE ", line, 3) == 0)
-	{
-		if (map->west_texture.path)
-			ft_error("duplicate element");
-		map->west_texture.path = set_texture(line);
-		map->elem++;
-		return (1);
-	}
-	if (ft_strncmp("EA ", line, 3) == 0)
-	{
-		if (map->east_texture.path)
-			ft_error("duplicate element");
-		map->east_texture.path = set_texture(line);
-		map->elem++;
-		return (1);
-	}
 	return (0);
+}
+
+void	fill_colors_norm(char *line, t_state *map)
+{
+	if (ft_strncmp("DOOR ", line, 5) == 0)
+		map->door_texture.path = set_texture(line);
+	else if (ft_strncmp("SPRITE ", line, 7) == 0)
+		map->sprite.path = set_texture(line);
+	else
+		ft_error("Hello there is an error here!");
 }
 
 void	fill_colors(char *line, t_state *map)
@@ -87,8 +81,12 @@ void	fill_colors(char *line, t_state *map)
 		else
 			ft_error("the element has already filled 2");
 	}
+	// else if (ft_strncmp("DOOR ", line, 5) == 0)
+	// 	map->door_texture.path = set_texture(line);
+	// else if (ft_strncmp("SPRITE ", line, 7) == 0)
+	// 	map->sprite.path = set_texture(line);
 	else
-		ft_error("Hello there is an error here!");
+		fill_colors_norm(line, map);
 }
 
 void	init_map(char *line, t_state *map)
@@ -112,6 +110,8 @@ void	all_ele_fil(t_state *map, char *line)
 		return ;
 	if (!if_textures_filled(map))
 	{
+		if (fill_text2(line, map))
+			return ;
 		if (fill_textures(line, map))
 			return ;
 	}

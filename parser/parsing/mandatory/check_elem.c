@@ -6,7 +6,7 @@
 /*   By: abihe <abihe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 17:07:17 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/09 16:47:14 by abihe            ###   ########.fr       */
+/*   Updated: 2023/03/13 18:06:57 by abihe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 int	if_textures_filled(t_state *map)
 {
-	if (map->north_texture.path && map->south_texture.path && map->east_texture.path && map->west_texture.path)
+	if (map->north_texture.path && map->south_texture.path
+		&& map->east_texture.path && map->west_texture.path)
 		return (1);
 	return (0);
 }
@@ -42,7 +43,7 @@ int	is_play(char pl)
 
 int	is_map_char(char c)
 {
-	if (is_play(c) || c == ' ' || c == '0' || c == '1' || c == '2')
+	if (is_play(c) || c == ' ' || c == '0' || c == '1' || c == '2' || c == '3')
 		return (1);
 	return (0);
 }
