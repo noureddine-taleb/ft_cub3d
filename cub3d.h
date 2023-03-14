@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ntaleb <ntaleb@student.42.fr>              +#+  +:+       +#+        */
+/*   By: abihe <abihe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 18:08:36 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/13 22:01:43 by ntaleb           ###   ########.fr       */
+/*   Updated: 2023/03/14 10:29:10 by abihe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@
 # define MAPS 32
 # define PS 8
 
-# define WIDTH (2870)
-# define HEIGHT (1420)
+# define WIDTH (2400)
+# define HEIGHT (1200)
 
 enum e_terrain {
 	terrain_negative_space = -1,
@@ -219,6 +219,7 @@ void				map_char(int i, int j, t_state *map);
 int					fill_do_sp(char *line, t_state *map);
 int					fill_text2(char *line, t_state *map);
 void				if_sprite(int i, int j, t_state *map);
+void				fill_colors_norm(char *line, t_state *map);
 
 void				init_window(t_state *state);
 int					trigger_render(t_state *state);

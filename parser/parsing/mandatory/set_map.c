@@ -6,7 +6,7 @@
 /*   By: abihe <abihe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 19:49:22 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/13 17:31:55 by abihe            ###   ########.fr       */
+/*   Updated: 2023/03/14 10:20:56 by abihe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,10 @@ void	inside_map(t_state *map)
 			if (is_play(map->map[i][j]))
 				check_pla(i, j, map);
 			if_sprite(i, j, map);
+			if (map->map[i][j] == '2' && !map->door_texture.path)
+				ft_error("door texture doesn't found");
+			if (map->map[i][j] == '3' && !map->sprite.path)
+				ft_error("sprite texture doesn't found");
 			j++;
 		}
 		i++;

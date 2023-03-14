@@ -6,7 +6,7 @@
 /*   By: abihe <abihe@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 18:38:04 by abihe             #+#    #+#             */
-/*   Updated: 2023/03/13 19:54:40 by abihe            ###   ########.fr       */
+/*   Updated: 2023/03/14 10:23:46 by abihe            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,16 +48,6 @@ int	fill_textures(char *line, t_state *map)
 	return (0);
 }
 
-void	fill_colors_norm(char *line, t_state *map)
-{
-	if (ft_strncmp("DOOR ", line, 5) == 0)
-		map->door_texture.path = set_texture(line);
-	else if (ft_strncmp("SPRITE ", line, 7) == 0)
-		map->sprite.path = set_texture(line);
-	else
-		ft_error("Hello there is an error here!");
-}
-
 void	fill_colors(char *line, t_state *map)
 {
 	if ((((ft_strncmp("F ", line, 2) == 0) && map->f == -1)
@@ -81,10 +71,6 @@ void	fill_colors(char *line, t_state *map)
 		else
 			ft_error("the element has already filled 2");
 	}
-	// else if (ft_strncmp("DOOR ", line, 5) == 0)
-	// 	map->door_texture.path = set_texture(line);
-	// else if (ft_strncmp("SPRITE ", line, 7) == 0)
-	// 	map->sprite.path = set_texture(line);
 	else
 		fill_colors_norm(line, map);
 }
