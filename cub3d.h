@@ -23,8 +23,8 @@
 # define MAPS 32
 # define PS 8
 
-# define WIDTH (2400)
-# define HEIGHT (1200)
+# define WIDTH (1200)
+# define HEIGHT (700)
 
 enum e_terrain {
 	terrain_negative_space = -1,
